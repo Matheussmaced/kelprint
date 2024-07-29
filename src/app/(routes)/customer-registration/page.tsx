@@ -1,8 +1,8 @@
 "use client"
 
 import { ThemeProvider } from "styled-components";
-import { defaultTheme } from "../themes/default";
-import { GlobalStyles } from "../styles/global";
+import { defaultTheme } from "../../themes/default";
+import { GlobalStyles } from "../../styles/global";
 import { Main } from "./styles";
 
 export default function CustomerRegistration(){
