@@ -4,8 +4,8 @@ export const defaultTheme = {
 
   "header-blue": "#327ad9",
   "button-orange":"#ffc107",
-  "button-green":"#dc3545",
-  "button-gray":"#089944",
+  "button-red": "#dc3545",
+  "button-green":"#089944",
 
   "gray-700":"#4F4F4F",
   "gray-500":"#808080",
