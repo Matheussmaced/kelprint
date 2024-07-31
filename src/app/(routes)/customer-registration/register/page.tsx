@@ -5,17 +5,33 @@ import { ButtonsContainer, Cancel, FormContainer, LinkContainer, Main, Submit } 
 import { defaultTheme } from "@/themes/default";
 import { GlobalStyles } from "@/styles/global";
 import { Save } from "lucide-react";
+import axios from "axios";
+import { BACKEND_URL } from "@/api";
+
 
 
 export default function Register(){
 
- function formHandle(e:any){
+  function formDataToJsonMapper(name:string, number:string){
+    let formatedData = {
+      name: name,
+      number: number,
+    }
+
+    return JSON.stringify(formatedData);
+  }
+
+ async function formHandle(e:any){
   e.preventDefault();
 
   const nameClient = e.target.name.value;
   const numberClient = e.target.number.value;
 
-  console.log(nameClient, numberClient);
+  const jsonData = formDataToJsonMapper(nameClient, numberClient);
+
+  const axiosConfig = {headers:{"Content-Type": "application/json"}};
+
+  axios.post(BACKEND_URL, jsonData, axiosConfig);
  }
 
   return(
@@ -25,7 +41,7 @@ export default function Register(){
       <p>Registrar usuario</p>
 
       <FormContainer>
-        <form onSubmit={function(e){formHandle(e)}}>
+        <form onSubmit={async (e) => await formHandle(e)}>
           <div>
             <label>Cliente</label>
               <input type="text" name="name"/>
