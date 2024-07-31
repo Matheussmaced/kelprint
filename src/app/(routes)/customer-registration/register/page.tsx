@@ -8,6 +8,16 @@ import { Save } from "lucide-react";
 
 
 export default function Register(){
+
+ function formHandle(e:any){
+  e.preventDefault();
+
+  const nameClient = e.target.name.value;
+  const numberClient = e.target.number.value;
+
+  console.log(nameClient, numberClient);
+ }
+
   return(
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
@@ -15,19 +25,19 @@ export default function Register(){
       <p>Registrar usuario</p>
 
       <FormContainer>
-        <form>
+        <form onSubmit={function(e){formHandle(e)}}>
           <div>
             <label>Cliente</label>
-              <input type="text"/>
+              <input type="text" name="name"/>
           </div>
          
           <div>
             <label>Telefone</label>
-              <input type="text"/>
+              <input type="text" name="number"/>
           </div>
 
       <ButtonsContainer>
-        <Submit>
+        <Submit type="submit">
           <Save size={16} />
           <p>Salvar</p>
         </Submit>
