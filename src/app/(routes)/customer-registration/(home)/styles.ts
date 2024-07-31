@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export const Main = styled.main`
@@ -32,6 +33,7 @@ export const SearchContainer = styled.main`
     border-radius: 5px;
 
     background-color: ${(props) => props.theme["button-green"]};
+    
     color: ${(props) => props.theme.white};
 
     cursor: pointer;
@@ -54,4 +56,8 @@ export const SearchBarContainer = styled.div`
 
     cursor: pointer;
   }
+`
+
+export const LinkContainer = styled(Link)`
+  text-decoration: none;
 `
