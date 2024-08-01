@@ -68,3 +68,16 @@ export const LinkContainer = styled(Link)`
 
   width: 100%;
 `
+
+export const Success = styled.div`
+  background-color: ${(props) => props.theme["header-blue"]};
+  color: ${(props) => props.theme.white};
+
+  font-weight: bold;
+
+  padding: 0.5rem;
+  margin: 0.3rem auto;
+
+  width: 19rem;
+  border-radius: 6px;
+`
