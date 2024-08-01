@@ -7,6 +7,7 @@ export const defaultTheme = {
   "button-red": "#dc3545",
   "button-green":"#089944",
 
+  "gray-300": "#DCDCDC",
   "gray-700":"#4F4F4F",
   "gray-500":"#808080",
   "gray-900":"#1C1C1C"
