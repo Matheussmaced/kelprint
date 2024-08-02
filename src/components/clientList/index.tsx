@@ -4,6 +4,9 @@ import { Pen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { ThemeProvider } from "styled-components";
 import { ButtonsContainer, InformationContainerMaster, Main } from "./styles";
+import axios from "axios";
+import { BACKEND_URL } from "@/api";
+import { useEffect, useState } from "react";
 
 interface ClientInfoProps {
   clients: {
@@ -13,18 +16,30 @@ interface ClientInfoProps {
   }[];
 }
 
-export default function ClientList({clients}:ClientInfoProps){
+export default function ClientList({clients:initialClient}:ClientInfoProps){
+
+  const [client, setClient] = useState(initialClient)
+
+  useEffect(() => {
+    setClient(initialClient);
+  },[initialClient])
 
   const formatClientId = (id: string) => {
     return id.length > 4 ? `...${id.slice(-4)}` : id;
   }
 
+  const deleteClient = (id: string) => {
+
+    axios.delete(`${BACKEND_URL}/${id}`);
+
+    setClient(client.filter(clients => clients.clientId !== id))
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <>
-        {clients.map((client, index) => (
+        {client.map((client, index) => (
           <Main key={client.clientId}>
             <InformationContainerMaster>
               <span>{index + 1}</span>
@@ -40,7 +55,7 @@ export default function ClientList({clients}:ClientInfoProps){
                 </Link>
 
                 <Link href="#">
-                  <button>
+                  <button onClick={ () => deleteClient(client.clientId) }>
                     <Trash2 size={16} />
                   </button>
                 </Link>
