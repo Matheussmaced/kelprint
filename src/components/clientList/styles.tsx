@@ -15,6 +15,10 @@ export const InformationContainerMaster = styled.div`
   justify-content: space-around;
 
   padding: 0.8rem;
+
+  span{
+    width: 10rem;
+  }
 `
 
 export const ButtonsContainer = styled.div`

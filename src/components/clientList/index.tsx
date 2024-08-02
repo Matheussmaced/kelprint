@@ -19,6 +19,7 @@ export default function ClientList({clients}:ClientInfoProps){
     return id.length > 4 ? `...${id.slice(-4)}` : id;
   }
 
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
