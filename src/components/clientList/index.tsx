@@ -18,7 +18,8 @@ interface ClientInfoProps {
 
 export default function ClientList({clients:initialClient}:ClientInfoProps){
 
-  const [client, setClient] = useState(initialClient)
+  const [client, setClient] = useState(initialClient);
+  const [clientId, setClientId] = useState("");
 
   useEffect(() => {
     setClient(initialClient);
@@ -35,6 +36,10 @@ export default function ClientList({clients:initialClient}:ClientInfoProps){
     setClient(client.filter(clients => clients.clientId !== id))
   }
 
+  const editClient = (id: string) => {
+    setClientId(id);
+  }
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
@@ -48,17 +53,14 @@ export default function ClientList({clients:initialClient}:ClientInfoProps){
               <span>{formatClientId(client.clientId)}</span>
 
               <ButtonsContainer>
-                <Link href="#">
+                <Link href={`/customer-registration/editClient/${client.clientId}`}>
                   <button>
-                    <Pen size={16} />
+                    <Pen size={16} onClick={ () => editClient(client.clientId) } />
                   </button>
                 </Link>
-
-                <Link href="#">
                   <button onClick={ () => deleteClient(client.clientId) }>
                     <Trash2 size={16} />
                   </button>
-                </Link>
               </ButtonsContainer>
             </InformationContainerMaster>
           </Main>
