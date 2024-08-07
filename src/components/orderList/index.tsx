@@ -1,22 +1,14 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
 import { Pen, Trash2 } from "lucide-react";
-import Link from "next/link";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
 import { Alert, ButtonContainer, Main, Ok } from "./styles";
 
-interface ClientInfoProps {
-  clients: {
-    clientName: string;
-    clientNumber: string;
-    clientId: string;
-  }[];
-}
 
-export default function OrderList({clients:initialClient}:ClientInfoProps){
+export default function OrderList(){
   
   return (
     <ThemeProvider theme={defaultTheme}>
