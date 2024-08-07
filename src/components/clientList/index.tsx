@@ -3,7 +3,7 @@ import { defaultTheme } from "@/themes/default";
 import { Pen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { ThemeProvider } from "styled-components";
-import { ButtonsContainer, InformationContainerMaster, Main } from "./styles";
+import { ButtonsContainer, InformationContainerMaster, LinkContainer, Main } from "./styles";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
@@ -48,7 +48,9 @@ export default function ClientList({clients:initialClient}:ClientInfoProps){
           <Main key={client.clientId}>
             <InformationContainerMaster>
               <span>{index + 1}</span>
-              <span>{client.clientName}</span>
+              <LinkContainer href={`/customer-registration/client/${client.clientId}`}>
+                <span>{client.clientName}</span>
+              </LinkContainer>
               <span>{client.clientNumber}</span>
               <span>{formatClientId(client.clientId)}</span>
 

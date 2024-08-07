@@ -1,3 +1,4 @@
+import Link from "next/link"
 import styled from "styled-components"
 
 export const Main = styled.main`
@@ -31,4 +32,11 @@ export const ButtonsContainer = styled.div`
     border: none;
     cursor: pointer;
   }
+`
+
+export const LinkContainer = styled(Link)`
+  text-decoration: none;
+  width: 10rem;
+
+  color: ${(props) => props.theme.black};
 `
