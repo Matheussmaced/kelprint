@@ -10,6 +10,7 @@ import { GlobalStyles } from "@/styles/global";
 import { Main, TitleContainer } from "../../(home)/styles";
 import SearchBar from "@/components/searchBarOrder";
 import OrderList from "@/components/orderList";
+import { useParams } from "next/navigation";
 
 interface clientInfoProps {
   clientName: string;
@@ -21,6 +22,9 @@ export default function Client() {
   const [clientInfo, setClientInfo] = useState<clientInfoProps[]>([]);
   const [filteredClient, setFilteredClient] = useState<clientInfoProps[]>([]);
   const [searchValue, setSearchValue] = useState("");
+
+  const params = useParams();
+  const clientIdParams = params.id;
 
   async function getClientInfos() {
     try {
@@ -54,7 +58,7 @@ export default function Client() {
     setFilteredClient(filtered);
   }, [searchValue, clientInfo]);
 
-  console.log(clientInfo);
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -64,7 +68,7 @@ export default function Client() {
       </TitleContainer>
       <Main>
       <SearchBar onSearch={setSearchValue} />
-      <OrderList />
+      <OrderList clientId={clientIdParams} />
       </Main>
     </ThemeProvider>
   );
