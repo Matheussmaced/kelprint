@@ -1,7 +1,6 @@
 "use client"
 
 import { ThemeProvider } from "styled-components";
-import ClientList from "@/components/clientList";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import { Main, TitleContainer } from "../../(home)/styles";
 import SearchBar from "@/components/searchBarOrder";
 import OrderList from "@/components/orderList";
 import { useParams } from "next/navigation";
+import SearchBarOrder from "@/components/searchBarOrder";
 
 interface clientInfoProps {
   clientName: string;
@@ -67,7 +67,7 @@ export default function Client() {
         <p>Pesquisar pedidos</p>
       </TitleContainer>
       <Main>
-      <SearchBar onSearch={setSearchValue} />
+      <SearchBarOrder onSearch={setSearchValue} clientId={clientIdParams} />
       <OrderList clientId={clientIdParams} />
       </Main>
     </ThemeProvider>

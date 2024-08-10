@@ -63,6 +63,7 @@ export default function OrderList({ clientId} :any) {
         {client.orders.map((order, index) => (
             order.finished == true ? 
               <Ok key={index}>
+                <span>Pedido de número: {index + 1}</span>
                 <span>Descrição: {order.comments}</span>
                 <span>Quantidade: {order.amount}</span>
                 <span>Tamanhos: {order.sizes}</span>
@@ -72,6 +73,7 @@ export default function OrderList({ clientId} :any) {
                 <span>Data do pedido: {formatterDate.format(new Date(order.creationTimestamp))}</span>
                 <span>Data de entrega: {order.deliveryDate}</span>
                 <span>Andamento do pedido: Finalizado</span>
+
                 <ButtonContainer>
                   <button>
                     <Trash2 width={16} color="white" />
@@ -83,6 +85,7 @@ export default function OrderList({ clientId} :any) {
               </Ok>
               :
               <Alert key={index}>
+                <span>Pedido de número: {index + 1}</span>
                 <span>Descrição: {order.comments}</span>
                 <span>Quantidade: {order.amount}</span>
                 <span>Tamanhos: {order.sizes}</span>

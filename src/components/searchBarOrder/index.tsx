@@ -5,9 +5,10 @@ import { LinkContainer, SearchBarContainer, SearchContainer } from "./styles";
 
 interface SearchBarProps {
   onSearch: (value: string) => void;
+  clientId: any
 }
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+export default function SearchBarOrder({ onSearch, clientId }: SearchBarProps) {
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = (e: any) => {
@@ -17,7 +18,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <SearchContainer>
-      <LinkContainer href="/customer-registration/register">
+      <LinkContainer href={`/customer-registration/registerOrder/${clientId}`}>
         <span>
           <CirclePlus size={16} />
           <p>Cadastrar pedido</p>
