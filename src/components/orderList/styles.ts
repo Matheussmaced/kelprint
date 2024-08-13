@@ -1,3 +1,4 @@
+import { Pen, Trash2 } from "lucide-react";
 import styled from "styled-components";
 
 export const Main = styled.main`
@@ -19,7 +20,7 @@ export const Alert = styled.div`
 
     width: 45%;
     padding: 1rem 2rem;
-    background-color: ${(props) => props.theme["button-orange"]};
+    background-color: ${(props) => props.theme["gray-300"]};
     color: ${(props) => props.theme.black};
 
     border-radius: 6px;
@@ -75,15 +76,51 @@ export const Late = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
   
   button{
     display: flex;
-    background-color: transparent;
     border: none;
     align-items: center;
     cursor: pointer;
   }
+`
+
+export const EditButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
+export const TrashButton = styled.button`
+  background-color: ${(props) => props.theme["button-red"]};
+  color: ${(props) => props.theme.white};
+
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+`
+
+export const PenButton = styled.button`
+  background-color: ${(props) => props.theme["header-blue"]};
+  color: ${(props) => props.theme.white};
+
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+`
+
+export const OkButton = styled.button`
+  background-color: ${(props) => props.theme["button-green"]};
+  color: ${(props) => props.theme.white};
+
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+`
+
+export const OkButtonRed = styled.button`
+background-color: ${(props) => props.theme["button-red"]};
+color: ${(props) => props.theme.white};
+
+padding: 0.3rem 0.5rem;
+border-radius: 5px;
 `

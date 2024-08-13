@@ -1,11 +1,12 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Pen, Trash2 } from "lucide-react";
+import { Check, CircleSlash2, Pen, Trash2 } from "lucide-react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
-import { Alert, ButtonContainer, Main, Ok } from "./styles";
+import { Alert, ButtonContainer, EditButtons, Main, Ok, OkButton, OkButtonRed, PenButton, TrashButton } from "./styles";
+import Link from "next/link";
 
 interface OrderProps {
   id: string,
@@ -72,6 +73,21 @@ export default function OrderList({ clientId} : any) {
     setFilteredOrders(filteredOrders.filter(order => order.id !== id));
   };
 
+  const checkOrder = (id: string, condition: boolean) => {
+    try {
+      axios.put(`${BACKEND_URL}/${id}/order`, {"finished": condition})
+
+      setFilteredOrders(prevOrders => 
+        prevOrders.map(order =>
+          order.id === id ? {...order, finished: condition} : order
+        )
+      )
+    } catch (error) {
+      console.error("Erro ao atualizar o status do pedido", error);
+    }
+
+  }
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
@@ -80,7 +96,7 @@ export default function OrderList({ clientId} : any) {
           order.finished ? 
             <Ok key={index}>
               <span>Pedido de número: {index + 1}</span>
-              <span>Descrição: {order.comments}</span>
+              <span>Descrição: {order.orderDescription}</span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>
@@ -91,18 +107,25 @@ export default function OrderList({ clientId} : any) {
               <span>Andamento do pedido: Finalizado</span>
 
               <ButtonContainer>
-                <button onClick={() => deleteOrder(order.id)}>
-                  <Trash2 width={16} color="white" />
-                </button>
-                <button>
-                  <Pen width={16} color="white" />
-                </button>
+                <EditButtons>
+                  <TrashButton onClick={() => deleteOrder(order.id)}>
+                    <Trash2 width={16} />
+                  </TrashButton>
+                  <Link href={`/customer-registration/editOrder/${order.id}`}>
+                    <PenButton>
+                      <Pen width={16} />
+                    </PenButton>
+                  </Link>
+                </EditButtons>
+                  <OkButtonRed onClick={() => checkOrder(order.id, false)}>
+                    <CircleSlash2 width={16}/>
+                  </OkButtonRed>
               </ButtonContainer>
             </Ok>
           :
             <Alert key={index}>
               <span>Pedido de número: {index + 1}</span>
-              <span>Descrição: {order.comments}</span>
+              <span>Descrição: {order.orderDescription}</span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>
@@ -112,12 +135,19 @@ export default function OrderList({ clientId} : any) {
               <span>Data de entrega: {order.deliveryDate}</span>
               <span>Andamento do pedido: em andamento</span>
               <ButtonContainer>
-                <button onClick={() => deleteOrder(order.id)}>
-                  <Trash2 width={16} />
-                </button>
-                <button>
-                  <Pen width={16} />
-                </button>
+                <EditButtons>
+                  <TrashButton onClick={() => deleteOrder(order.id)}>
+                    <Trash2 width={16} />
+                  </TrashButton>
+                  <Link href={`/customer-registration/editOrder/${order.id}`}>
+                    <PenButton>
+                      <Pen width={16} />
+                    </PenButton>
+                  </Link>
+                </EditButtons>
+                  <OkButton onClick={() => checkOrder(order.id, true)}>
+                    <Check width={16}/>
+                  </OkButton>
               </ButtonContainer>
             </Alert>
         ))}

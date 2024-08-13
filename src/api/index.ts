@@ -1,1 +1,1 @@
-export const BACKEND_URL:string = "https://kelprint.onrender.com/client";
+export const BACKEND_URL:string = "https://cadastro-de-pedidos.onrender.com/client";
