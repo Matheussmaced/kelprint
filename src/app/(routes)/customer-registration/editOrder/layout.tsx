@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import type { Metadata } from 'next'
-import HeaderEditOrder from '@/components/HeaderEditOrder'
+import HeaderEditOrder from '@/components/[id]/HeaderEditOrder'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
