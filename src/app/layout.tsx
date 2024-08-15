@@ -32,7 +32,10 @@ export default function RootLayout({
       {authenticated ? 
         <body className={inter.className}>{children}</body>
         :
+        pageLoaded ?
         <body className={inter.className}> <Home /> </body>
+        :
+        null
       }
     </html>
   );
