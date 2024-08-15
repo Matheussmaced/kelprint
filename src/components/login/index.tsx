@@ -37,7 +37,7 @@ export default function Login() {
          
           <div>
               <label>Senha</label>
-              <input type="text" name="password" placeholder="Digite sua senha"/>
+              <input type="password" name="password" placeholder="Digite sua senha"/>
           </div>
 
       <ButtonsContainer>
