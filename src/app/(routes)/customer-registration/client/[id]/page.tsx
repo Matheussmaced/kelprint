@@ -7,15 +7,18 @@ import { useEffect, useState } from "react";
 import { defaultTheme } from "@/themes/default";
 import { GlobalStyles } from "@/styles/global";
 import { Main, TitleContainer } from "../../(home)/styles";
-import SearchBar from "@/components/searchBarOrder";
 import OrderList from "@/components/orderList";
 import { useParams } from "next/navigation";
 import SearchBarOrder from "@/components/searchBarOrder";
 
+interface clientOrderProps {
+  finish: boolean;
+}
 interface clientInfoProps {
   clientName: string;
   clientNumber: string;
   clientId: string;
+  clientOrders: clientOrderProps[];
 }
 
 export default function Client() {
@@ -35,8 +38,8 @@ export default function Client() {
           clientId: client.clientId,
           clientName: client.name,
           clientNumber: client.number,
+          clientOrders: client.order,
         }));
-
         setClientInfo(clients);
         setFilteredClient(clients);
       } else {
@@ -46,6 +49,7 @@ export default function Client() {
       console.error("Erro ao buscar informações dos clientes:", error);
     }
   }
+  
 
   useEffect(() => {
     getClientInfos();
@@ -57,8 +61,6 @@ export default function Client() {
     );
     setFilteredClient(filtered);
   }, [searchValue, clientInfo]);
-
-
 
   return (
     <ThemeProvider theme={defaultTheme}>

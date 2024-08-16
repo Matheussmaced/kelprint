@@ -10,10 +10,14 @@ import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
 import SearchBar from "@/components/searchBar";
 
+interface clientOrderProps {
+  finish: boolean;
+}
 interface clientInfoProps {
   clientName: string;
   clientNumber: string;
   clientId: string;
+  clientOrders: clientOrderProps[];
 }
 
 export default function CustomerRegistration() {
@@ -30,6 +34,7 @@ export default function CustomerRegistration() {
           clientId: client.clientId,
           clientName: client.name,
           clientNumber: client.number,
+          clientOrders: client.order
         }));
 
         setClientInfo(clients);

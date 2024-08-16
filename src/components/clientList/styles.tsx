@@ -6,8 +6,19 @@ export const Main = styled.main`
   max-width: 60rem;
   padding: 0 1rem;
   border-radius: 6px;
+  border: solid 2px ${(props) => props.theme["button-orange"]};
 
   background-color: ${(props) => props.theme["gray-300"]};
+`
+
+export const MainFinishedFalse = styled.main`
+  margin: 1rem auto;
+  max-width: 60rem;
+  padding: 0 1rem;
+  border-radius: 6px;
+
+  background-color: ${(props) => props.theme["gray-300"]};
+  border: 2px solid ${(props) => props.theme["button-green"]};
 `
 
 export const InformationContainerMaster = styled.div`
