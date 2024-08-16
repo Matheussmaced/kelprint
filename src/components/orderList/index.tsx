@@ -25,7 +25,7 @@ interface ClientProps {
   orders: OrderProps[];
 }
 
-export default function OrderList({ clientId} : any) {
+export default function OrderList({ clientId, searchValue} : any) {
   const [client, setClient] = useState<ClientProps | null>(null);
   const [filteredOrders, setFilteredOrders] = useState<OrderProps[]>([]);
   const [filterCriteria, setFilterCriteria] = useState<string>("");
@@ -49,16 +49,17 @@ export default function OrderList({ clientId} : any) {
   }, [clientId]);
 
   useEffect(() => {
-    if (client && filterCriteria) {
+    if (client && searchValue) {
       const filtered = client.orders.filter(order =>
-        order.kindOfFabric.includes(filterCriteria) ||
-        order.sizes.includes(filterCriteria)
+        order.orderDescription.toLowerCase().includes(searchValue.toLowerCase()) ||
+        order.kindOfFabric.toLowerCase().includes(searchValue.toLowerCase()) ||
+        order.sizes.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredOrders(filtered);
     } else if (client) {
       setFilteredOrders(client.orders);
     }
-  }, [filterCriteria, client]);
+  }, [searchValue, client]);
 
   if (!client || !client.orders) {
     return <div>Loading...</div>;

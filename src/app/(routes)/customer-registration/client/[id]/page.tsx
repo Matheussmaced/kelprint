@@ -70,7 +70,7 @@ export default function Client() {
       </TitleContainer>
       <Main>
       <SearchBarOrder onSearch={setSearchValue} clientId={clientIdParams} />
-      <OrderList clientId={clientIdParams} />
+      <OrderList clientId={clientIdParams} searchValue={searchValue} />
       </Main>
     </ThemeProvider>
   );

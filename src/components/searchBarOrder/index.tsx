@@ -12,8 +12,10 @@ export default function SearchBarOrder({ onSearch, clientId }: SearchBarProps) {
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = (e: any) => {
-    setSearchValue(e.currentTarget.value);
-    onSearch(e.currentTarget.value);
+    const value = e.currentTarget.value;
+
+    setSearchValue(value);
+    onSearch(value);
   }
 
   return (
