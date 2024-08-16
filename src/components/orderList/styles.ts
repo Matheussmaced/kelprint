@@ -1,4 +1,3 @@
-import { Pen, Trash2 } from "lucide-react";
 import styled from "styled-components";
 
 export const Main = styled.main`
@@ -6,6 +5,7 @@ export const Main = styled.main`
   max-width: 56rem;
   padding: 0 1rem;
   border-radius: 6px;
+  height: 100%;
 
   display: flex;
   flex-wrap: wrap;
@@ -14,7 +14,7 @@ export const Main = styled.main`
 `
 
 export const Alert = styled.div`
-  display: flex;
+    display: flex;
     flex-direction: column;
     gap: 0.8rem;
 
@@ -22,6 +22,7 @@ export const Alert = styled.div`
     padding: 1rem 2rem;
     background-color: ${(props) => props.theme["gray-300"]};
     color: ${(props) => props.theme.black};
+    
 
     border-radius: 6px;
 
@@ -42,7 +43,7 @@ export const Ok = styled.div`
     padding: 1rem 2rem;
     background-color: ${(props) => props.theme["button-green"]};
     color: ${(props) => props.theme.white};
-
+ 
     border-radius: 6px;
 
     span{
@@ -78,7 +79,7 @@ export const ButtonContainer = styled.div`
   gap: 1rem;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: auto;
   
   button{
     display: flex;
@@ -86,6 +87,8 @@ export const ButtonContainer = styled.div`
     align-items: center;
     cursor: pointer;
   }
+
+ 
 `
 
 export const EditButtons = styled.div`
