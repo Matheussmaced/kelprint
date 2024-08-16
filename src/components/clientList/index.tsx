@@ -52,10 +52,7 @@ export default function ClientList({clients:initialClient}:ClientInfoProps){
       <GlobalStyles />
       <>
       {client.map((client, index) => {
-          const hasFinishedOrder = client.clientOrders.some((order) => order.finished);
-          const noOrders = client.clientOrders.length === 0;
-
-          if (hasFinishedOrder || noOrders) {
+          if ((client.clientOrders.map((finish) => finish.finished).includes(false))) {
             return (
               <MainFinishedFalse key={client.clientId}>
                 <InformationContainerMaster>
