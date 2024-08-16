@@ -7,7 +7,7 @@ import { GlobalStyles } from "../styles/global";
 import { ArrowBigLeft, LogIn } from "lucide-react";
 import Link from "next/link";
 import { BACKEND_URL } from "@/api";
-import { removeTokenLogin } from "./LogIn";
+import { removeTokenLogin } from "./logInFunction";
 
 export default function HeaderRegister(){
   return(

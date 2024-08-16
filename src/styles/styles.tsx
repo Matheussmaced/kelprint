@@ -3,7 +3,8 @@
 import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "../themes/default";
 import { GlobalStyles } from "./global";
-import Login from "@/components/login";
+import Login from "../components/login";
+
 
 export default function Provider(){
   return(

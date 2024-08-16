@@ -6,7 +6,7 @@ import { defaultTheme } from "../themes/default";
 import { GlobalStyles } from "../styles/global";
 import { MainContainer } from "@/styles/HeaderCustomerRegistrationStyles";
 import { LogIn } from "lucide-react";
-import { removeTokenLogin } from "./LogIn";
+import { removeTokenLogin } from "./logInFunction";
 
 export default function HeaderCustomerRegistration(){
 

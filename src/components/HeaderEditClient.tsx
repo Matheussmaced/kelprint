@@ -5,7 +5,7 @@ import { ArrowContainer, LinkContainer, MainContainer } from "../styles/GlobalHe
 import { defaultTheme } from "../themes/default";
 import { GlobalStyles } from "../styles/global";
 import { ArrowBigLeft, LogIn } from "lucide-react";
-import { removeTokenLogin } from "./LogIn";
+import { removeTokenLogin } from "./logInFunction";
 
 export default function HeaderEditClient(){
   return(
