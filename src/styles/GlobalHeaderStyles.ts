@@ -5,7 +5,7 @@ export const MainContainer = styled.main`
   padding: 1.2rem;
   text-align: center;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   position: relative;
 
@@ -13,6 +13,25 @@ export const MainContainer = styled.main`
   color: ${(props) => props.theme.white};
   word-spacing: 0.2em;
 
+  button {
+    background-color: transparent;
+    border: none;
+    color: ${(props) => props.theme.white};
+    display: flex;
+    align-items: center;
+
+    gap: 0.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover{
+      transform: scale(1.2);
+    }
+  }
+
+  a{
+      text-decoration: none;
+    }
 `
 
 export const ArrowContainer = styled.div`
@@ -26,15 +45,15 @@ export const ArrowContainer = styled.div`
   color: ${(props) => props.theme["header-blue"]};
   cursor: pointer;
 
-  position: absolute;
-  left: 1rem;
+  transition: 0.3s;
+
+    &:hover{
+      transform: scale(1.2);
+    }
 `
 
 export const LinkContainer = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-
-  left: 1rem;
 `

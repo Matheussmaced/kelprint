@@ -1,12 +1,13 @@
 "use client"
 
 import { ThemeProvider } from "styled-components";
-import { ArrowContainer, LinkContainer, MainContainer } from "../styles/StylesHeaderCustomerRegistration";
+import { ArrowContainer, LinkContainer, MainContainer } from "../styles/GlobalHeaderStyles";
 import { defaultTheme } from "../themes/default";
 import { GlobalStyles } from "../styles/global";
-import { ArrowBigLeft } from "lucide-react";
+import { ArrowBigLeft, LogIn } from "lucide-react";
 import Link from "next/link";
 import { BACKEND_URL } from "@/api";
+import { removeTokenLogin } from "./LogIn";
 
 export default function HeaderRegister(){
   return(
@@ -19,6 +20,13 @@ export default function HeaderRegister(){
         </ArrowContainer>
     </LinkContainer>
       <h3>Cadastro de clientes</h3>
+      
+      <a href="/" onClick={() => removeTokenLogin()}>
+        <button >
+          Sair
+          <LogIn width={16} />
+        </button> 
+      </a>
    </MainContainer>
   </ThemeProvider> 
   )
