@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "@/components/searchBar";
 
 interface clientOrderProps {
-  finish: boolean;
+  finished: boolean;
 }
 interface clientInfoProps {
   clientName: string;
