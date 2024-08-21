@@ -14,10 +14,10 @@ interface OrderProps {
   amount: number;
   sizes: string;
   kindOfFabric: string;
-  typeOfCollar: string | null;
+  typeOfCollar: string ;
   comments: string;
   creationTimestamp: string;
-  deliveryDate: string | null;
+  deliveryDate: string ;
   finished: boolean;
 }
 
@@ -28,8 +28,7 @@ interface ClientProps {
 export default function OrderList({ clientId, searchValue} : any) {
   const [client, setClient] = useState<ClientProps | null>(null);
   const [filteredOrders, setFilteredOrders] = useState<OrderProps[]>([]);
-  const [filterCriteria, setFilterCriteria] = useState<string>("");
-
+  
   async function getClientInfos() {
     try {
       const response = await axios.get(`${BACKEND_URL}/${clientId}`);
@@ -88,7 +87,6 @@ export default function OrderList({ clientId, searchValue} : any) {
     }
 
   }
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />

@@ -37,14 +37,12 @@ export default function RegisterOrder(){
       kindOfFabric: e.target.kindOfFabric.value,
       typeOfCollar: e.target.typeOfCollar.value,
       comments: e.target.comments.value,
-      deliveryDate:e.target.deliveryDate.value,
+      deliveryDate: e.target.deliveryDate.value,
   }
 
 
   const jsonData = formDataToJsonMapper(formData);
-
   const axiosConfig = {headers:{"Content-Type": "application/json"}};
-
 
   if(formData.orderDescription &&
     formData.amount &&
@@ -114,7 +112,7 @@ export default function RegisterOrder(){
           </div>
 
           <div>
-            <label>Dia da entrega</label>
+            <label>Data da entrega</label>
               <input type="text" name="deliveryDate"/>
           </div>
       <ButtonsContainer>
