@@ -32,4 +32,4 @@ A aplicação se comunica com uma API RESTful construída com Java Spring Boot, 
 ### Instalação e Configuração
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-repositorio/kelprint.git
+   git clone https://github.com/Matheussmaced/kelprint.git
