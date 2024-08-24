@@ -4,10 +4,15 @@ import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "@/themes/default";
 import { GlobalStyles } from "@/styles/global";
 import { Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonsContainer, Cancel, FormContainer, LinkContainer, Main, Submit, Success } from "./styles";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
+
+interface clientInfoProps {
+  clientName: string;
+  clientNumber: string;
+}
 
 function formDataToJsonMapper(name:string, number:string){
   let formatedData = {
@@ -21,6 +26,19 @@ export default function EditClientComponent( {idClient} : any ){
 
  const [submitMessage, setSubmitMessage] = useState("");
  const [clientData, setClientData] = useState<{name: string, number: string} | null>(null)
+
+ useEffect(() => {
+  async function fetchClientData() {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/${idClient}`);
+      setClientData(response.data); // Assume-se que response.data contém os dados do cliente
+    } catch (error) {
+      console.log("Erro ao buscar dados do cliente:", error);
+    }
+  }
+
+  fetchClientData();
+}, [idClient]);
 
  async function formHandle(e: any){
   e.preventDefault();
@@ -42,9 +60,9 @@ export default function EditClientComponent( {idClient} : any ){
   }
  }
 
- const handlerCancel = () => {
-  setSubmitMessage("");
- }
+  const handlerCancel = () => {
+    setSubmitMessage("");
+  }
 
   return(
     <ThemeProvider theme={defaultTheme}>
@@ -55,13 +73,12 @@ export default function EditClientComponent( {idClient} : any ){
         <Success>
         {submitMessage}
       </Success>
-      )}
-      
+      )}     
       <FormContainer>
         <form onSubmit={async (e) => await formHandle(e)}>
           <div>
             <label>Cliente</label>
-              <input type="text" name="name" defaultValue={clientData?.name || ""}/>
+              <input type="text" name="name"  defaultValue={clientData?.name || ""} />
           </div>
          
           <div>
