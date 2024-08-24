@@ -63,7 +63,7 @@ export default function EditClientOrder() {
     const axiosConfig = { headers: { "Content-Type": "application/json" } };
 
     try {
-      await axios.put(`${BACKEND_URL}/clients/${clientId}/orders`, jsonData, axiosConfig);
+      await axios.put(`${BACKEND_URL}/${clientId}/order`, jsonData, axiosConfig);
       setSubmitMessage("Pedido atualizado com sucesso!");
     } catch (error) {
       setSubmitMessage("Erro ao atualizar o pedido!");
