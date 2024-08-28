@@ -15,15 +15,61 @@ import {
 import { Download } from "lucide-react";
 
 import kelPrintImage from "../../../../../../public/kelprint.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import axios from "axios";
+import { BACKEND_URL } from "@/api";
+
+interface Order {
+  id: string;
+  orderDescription: string;
+  amount: number;
+  sizes: string;
+  kindOfFabric: string;
+  typeOfCollar: string;
+  comments: string;
+  deliveryDate: string;
+  finished: boolean;
+  creationTimestamp: string;
+  updateTimestamp: string;
+}
+
+interface Client {
+  name: string;
+  number: string;
+}
 
 export default function Invoice() {
   const params = useParams();
   const idOrder = params.id;
 
   const [loader, setLoader] = useState(false);
+  const [orderData, setOrderData] = useState<Order | null>(null);
+  const [clientData, setClientData] = useState<Client | null>(null);
+
+  useEffect(() => {
+
+
+  const fetchClientAndOrderData = async () => {
+    try {
+        const response = await axios.get(BACKEND_URL)
+        const clients = response.data;
+
+        for(let client of clients){
+          const order = client.order.find((o:Order) => o.id === idOrder);
+          if(order){
+            setOrderData(order);
+            setClientData({name: client.name, number: client.number})
+            break;
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao buscas dados do pedido", error)
+      }
+    }
+    fetchClientAndOrderData();
+  }, [idOrder])
 
   const downloadPDF = () => {
     const capture = document.querySelector(".container") as HTMLElement;
@@ -60,7 +106,6 @@ export default function Invoice() {
     }
   };
   
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -79,33 +124,34 @@ export default function Invoice() {
           <ContainerInformation>
             <span>Informações do cliente</span>
           </ContainerInformation>
-          <ContainerDataClient>
-            <span>Nome do cliente: Matheus</span>
-            <span>Número do cliente: (88) 9.93405-3203</span>
-          </ContainerDataClient>
-
+          {clientData && (
+            <ContainerDataClient>
+              <span>Nome do cliente: {clientData.name} </span>
+              <span>Número do cliente: {clientData.number} </span>
+            </ContainerDataClient>
+          )}
           <ContainerInformation>
             <span>Informações do pedido</span>
           </ContainerInformation>
 
-          <ContainerDataClient>
-            <span>
-              Descrição do pedido: Camisas feitas para o Juazeiro do Norte, para
-              o evento da prefeitura
-            </span>
-            <span>Valor total: 1.750,00</span>
-            <span>Quantidade de peças: 50 unidades</span>
-            <span>Tamanhos: 25pm 25mm</span>
-            <span>Tipo da gola: gola polo e punho</span>
-            <span>Tipo da malha: malha pp</span>
-            <span>
-              Comentário: A gola tem quer ser de tal forma com tal formato no
-              corte
-            </span>
-            <span>Data de registro: 27/08/2024</span>
-            <span>Data de entrega: 20/09/2024</span>
-            <span>Estado do pedido: em andamento</span>
-          </ContainerDataClient>
+          {orderData && (
+            <ContainerDataClient>
+              <span>
+                Descrição do pedido: {orderData.orderDescription}
+              </span>
+              <span>Valor total: 1.750,00</span>
+              <span>Quantidade de peças: {orderData.amount}</span>
+              <span>Tamanhos: {orderData.sizes}</span>
+              <span>Tipo da gola: {orderData.typeOfCollar}</span>
+              <span>Tipo da malha: {orderData.kindOfFabric}</span>
+              <span>
+                Comentário: {orderData.comments}
+              </span>
+              <span>Data de registro: {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
+              <span>Data de entrega: {orderData.deliveryDate}</span>
+              <span>Estado do pedido: {orderData.finished ? "Finalizado" : "Em andamento"}</span>
+            </ContainerDataClient>
+          )}
           </MainContainer>
       </div>
             <ButtonDownload onClick={downloadPDF} disabled={loader}>
