@@ -26,7 +26,7 @@ export default function Invoice() {
   const [loader, setLoader] = useState(false);
 
   const downloadPDF = () => {
-    const capture = document.querySelector(".container");
+    const capture = document.querySelector(".container") as HTMLElement;
     if (capture) {
       setLoader(true);
       html2canvas(capture, { scale: 3 }).then((canvas) => {
