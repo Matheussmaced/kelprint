@@ -112,6 +112,14 @@ export const PenButton = styled.button`
   border-radius: 5px;
 `
 
+export const DocButton = styled.button`
+  background-color: ${(props) => props.theme.white};
+  color: ${(props) => props.theme.black};
+
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+`
+
 export const OkButton = styled.button`
   background-color: ${(props) => props.theme["button-green"]};
   color: ${(props) => props.theme.white};

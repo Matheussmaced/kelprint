@@ -1,11 +1,11 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Check, CircleSlash2, Pen, Trash2 } from "lucide-react";
+import { Check, CircleSlash2, FileText, Pen, Trash2 } from "lucide-react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
-import { Alert, ButtonContainer, EditButtons, Main, Ok, OkButton, OkButtonRed, PenButton, TrashButton } from "./styles";
+import { Alert, ButtonContainer, DocButton, EditButtons, Main, Ok, OkButton, OkButtonRed, PenButton, TrashButton } from "./styles";
 import Link from "next/link";
 
 interface OrderProps {
@@ -115,6 +115,11 @@ export default function OrderList({ clientId, searchValue} : any) {
                       <Pen width={16} />
                     </PenButton>
                   </Link>
+                  <Link href={`/customer-registration/invoice/${order.id}`}>
+                    <DocButton>
+                      <FileText width={19} />
+                    </DocButton>
+                  </Link>
                 </EditButtons>
                   <OkButtonRed onClick={() => checkOrder(order.id, false)}>
                     <CircleSlash2 width={16}/>
@@ -142,6 +147,11 @@ export default function OrderList({ clientId, searchValue} : any) {
                     <PenButton>
                       <Pen width={16} />
                     </PenButton>
+                  </Link>
+                  <Link href={`/customer-registration/invoice/${order.id}`}>
+                    <DocButton>
+                      <FileText width={19} />
+                    </DocButton>
                   </Link>
                 </EditButtons>
                   <OkButton onClick={() => checkOrder(order.id, true)}>
