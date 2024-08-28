@@ -89,7 +89,7 @@ export default function Invoice() {
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
 
         // Adjust image width and height in PDF
-        const width = imgWidth * ratio - 180;
+        const width = imgWidth * ratio - 80;
         const height = imgHeight * ratio -5;
 
         // Adjust to center and expand as much as possible without distorting
