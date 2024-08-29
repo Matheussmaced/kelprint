@@ -1,5 +1,6 @@
+import { Loader } from "lucide-react"
 import Link from "next/link"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 
 export const Main = styled.main`
   margin: 1rem auto;
@@ -50,4 +51,28 @@ export const LinkContainer = styled(Link)`
   width: 10rem;
 
   color: ${(props) => props.theme.black};
+`
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+export const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 3rem auto;
+
+  animation: ${pulse} 1.5s infinite ease-in-out;
+
+  gap: 0.6rem;
 `

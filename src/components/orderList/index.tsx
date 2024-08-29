@@ -1,17 +1,20 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Check, CircleSlash2, FileText, Pen, Trash2 } from "lucide-react";
+import { Check, CircleSlash2, FileText, Loader, Pen, Trash2 } from "lucide-react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
 import { Alert, ButtonContainer, DocButton, EditButtons, Main, Ok, OkButton, OkButtonRed, PenButton, TrashButton } from "./styles";
 import Link from "next/link";
+import { Loading } from "../clientList/styles";
 
 interface OrderProps {
   id: string,
   orderDescription: string;
   amount: number;
+  totalValue: string,
+  valuePerUnit: string,
   sizes: string;
   kindOfFabric: string;
   typeOfCollar: string ;
@@ -61,7 +64,14 @@ export default function OrderList({ clientId, searchValue} : any) {
   }, [searchValue, client]);
 
   if (!client || !client.orders) {
-    return <div>Loading...</div>;
+    return(
+      <ThemeProvider theme={defaultTheme}>
+        <Loading>
+          <Loader width={25} />
+          <span>Carregando pedidos...</span>
+        </Loading>
+      </ThemeProvider>
+    )
   }
 
   const formatterDate = Intl.DateTimeFormat("pt-BR", {
@@ -96,6 +106,8 @@ export default function OrderList({ clientId, searchValue} : any) {
             <Ok key={index}>
               <span>Pedido de número: {index + 1}</span>
               <span>Descrição: {order.orderDescription}</span>
+              <span>Valor por unidade: {order.valuePerUnit} </span>
+              <span>Valor total: {order.totalValue} </span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>
@@ -130,6 +142,8 @@ export default function OrderList({ clientId, searchValue} : any) {
             <Alert key={index}>
               <span>Pedido de número: {index + 1}</span>
               <span>Descrição: {order.orderDescription}</span>
+              <span>Valor por unidade: {order.valuePerUnit} </span>
+              <span>Valor total: {order.totalValue} </span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>

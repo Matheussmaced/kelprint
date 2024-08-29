@@ -17,12 +17,19 @@ export const ButtonDownload = styled.button`
 
     padding: 0.3rem;
     margin: 0 auto;
+
+    cursor: pointer;
+    transition: 1s;
+
+    &:hover{
+      transform: scale(1.05);
+    }
 `
 
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 40%;
+  max-width: 70%;
   text-align: center;
   gap: 0.4rem;
   
@@ -33,11 +40,11 @@ export const Header = styled.div`
 export const ImageContainer = styled(Image)`
   display: flex;
   align-items: center;
-  width: 180px;
-  height: 80px;
+  width: 11.25rem;
+  height: 85px;
   border-radius: 1.2rem;
 
-  margin: 0 auto;
+  margin: 0 auto 0.5rem;
 `
 
 export const ContainerInformation = styled.div`

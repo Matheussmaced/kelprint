@@ -24,6 +24,8 @@ import { BACKEND_URL } from "@/api";
 interface Order {
   id: string;
   orderDescription: string;
+  totalValue: string,
+  valuePerUnit: string,
   amount: number;
   sizes: string;
   kindOfFabric: string;
@@ -115,9 +117,9 @@ export default function Invoice() {
           <Header>
             <ImageContainer src={kelPrintImage} alt="Logo da KelPrint" />
             <span>KelPrint</span>
-            <span>Av. Antônio Ricardo</span>
+            <span>Av. Antônio Ricardo, N.º 10 - CENTRO</span>
             <span>Aurora-CE</span>
-            <span>CNPJ: 123123123123-0</span>
+            <span>CNPJ: 45.904.611/0001-00</span>
             <span>Email: kellaurora@gmail.com</span>
           </Header>
 
@@ -126,8 +128,8 @@ export default function Invoice() {
           </ContainerInformation>
           {clientData && (
             <ContainerDataClient>
-              <span>Nome do cliente: {clientData.name} </span>
-              <span>Número do cliente: {clientData.number} </span>
+              <span><strong> Nome do cliente:</strong> {clientData.name} </span>
+              <span><strong> Número do cliente:</strong> {clientData.number} </span>
             </ContainerDataClient>
           )}
           <ContainerInformation>
@@ -137,19 +139,20 @@ export default function Invoice() {
           {orderData && (
             <ContainerDataClient>
               <span>
-                Descrição do pedido: {orderData.orderDescription}
+                <strong> Descrição do pedido: </strong>{orderData.orderDescription}
               </span>
-              <span>Valor total: 1.750,00</span>
-              <span>Quantidade de peças: {orderData.amount}</span>
-              <span>Tamanhos: {orderData.sizes}</span>
-              <span>Tipo da gola: {orderData.typeOfCollar}</span>
-              <span>Tipo da malha: {orderData.kindOfFabric}</span>
+              <span> <strong>Valor por peça:</strong> {orderData.valuePerUnit} </span>
+              <span><strong>Valor total:</strong> {orderData.totalValue} </span>
+              <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
+              <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
+              <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
+              <span><strong>Tipo da malha:</strong> {orderData.kindOfFabric}</span>
               <span>
-                Comentário: {orderData.comments}
+              <strong> Comentário:</strong> {orderData.comments}
               </span>
-              <span>Data de registro: {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
-              <span>Data de entrega: {orderData.deliveryDate}</span>
-              <span>Estado do pedido: {orderData.finished ? "Finalizado" : "Em andamento"}</span>
+              <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
+              <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
+              <span><strong>Estado do pedido:</strong> {orderData.finished ? "Finalizado" : "Em andamento"}</span>
             </ContainerDataClient>
           )}
           </MainContainer>

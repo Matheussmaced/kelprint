@@ -1,9 +1,9 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Pen, Trash2 } from "lucide-react";
+import { Loader, Pen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { ThemeProvider } from "styled-components";
-import { ButtonsContainer, InformationContainerMaster, LinkContainer, Main, MainFinishedFalse } from "./styles";
+import { ButtonsContainer, InformationContainerMaster, LinkContainer, Loading, Main, MainFinishedFalse } from "./styles";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
@@ -44,8 +44,16 @@ export default function ClientList({clients:initialClient}:ClientInfoProps){
     setClientId(id);
   }
 
-  const mapTest = client.map((client) => client.clientOrders.map((order) => order.finished))
-  console.log(mapTest)
+  if (!client ||  client.length === 0) {
+    return(
+      <ThemeProvider theme={defaultTheme}>
+        <Loading>
+          <Loader width={25} />
+          <span>Carregando clientes...</span>
+        </Loading>
+      </ThemeProvider>
+    )
+  }
   
   return (
     <ThemeProvider theme={defaultTheme}>

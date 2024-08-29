@@ -12,6 +12,8 @@ import { useParams } from "next/navigation";
 
 interface FormDataToJsonMapperProps{
   orderDescription: string,
+  totalValue: string,
+  valuePerUnit: string,
   amount: string,
   sizes: string,
   kindOfFabric: string,
@@ -38,6 +40,8 @@ export default function RegisterOrder(){
       typeOfCollar: e.target.typeOfCollar.value,
       comments: e.target.comments.value,
       deliveryDate: e.target.deliveryDate.value,
+      valuePerUnit: e.target.valuePerUnit.value,
+      totalValue: e.target.totalValue.value,
   }
 
 
@@ -45,6 +49,8 @@ export default function RegisterOrder(){
   const axiosConfig = {headers:{"Content-Type": "application/json"}};
 
   if(formData.orderDescription &&
+    formData.totalValue &&
+    formData.valuePerUnit &&
     formData.amount &&
     formData.sizes &&
     formData.kindOfFabric &&
@@ -84,6 +90,16 @@ export default function RegisterOrder(){
           <div>
             <label>Descrição do pedido</label>
               <input type="text" name="orderDescription"/>
+          </div>
+
+          <div>
+            <label>Valor por unidade</label>
+              <input type="text" name="valuePerUnit"/>
+          </div>
+
+          <div>
+            <label>Valor total</label>
+              <input type="text" name="totalValue"/>
           </div>
          
           <div>

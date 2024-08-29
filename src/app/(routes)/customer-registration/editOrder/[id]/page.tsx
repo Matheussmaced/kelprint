@@ -13,6 +13,8 @@ import { useParams } from "next/navigation";
 interface FormDataToJsonMapperProps {
   orderDescription: string,
   amount: string,
+  totalValue: string,
+  valuePerUnit: string,
   sizes: string,
   kindOfFabric: string,
   typeOfCollar: string,
@@ -57,6 +59,8 @@ export default function EditClientOrder() {
       typeOfCollar: e.target.typeOfCollar.value || orderData?.typeOfCollar,
       comments: e.target.comments.value || orderData?.comments,
       deliveryDate: e.target.deliveryDate.value || orderData?.deliveryDate,
+      totalValue: e.target.totalValue.value || orderData?.totalValue,
+      valuePerUnit: e.target.valuePerUnit.value || orderData?.valuePerUnit,
     };
 
     const jsonData = formDataToJsonMapper(formData);
@@ -93,6 +97,16 @@ export default function EditClientOrder() {
             <div>
               <label>Descrição do pedido</label>
               <input type="text" name="orderDescription" defaultValue={orderData?.orderDescription || ""} />
+            </div>
+
+            <div>
+              <label>Valor por unidade</label>
+              <input type="text" name="valuePerUnit" defaultValue={orderData?.valuePerUnit || ""} />
+            </div>
+
+            <div>
+              <label>Valor total</label>
+              <input type="text" name="totalValue" defaultValue={orderData?.totalValue || ""} />
             </div>
 
             <div>
