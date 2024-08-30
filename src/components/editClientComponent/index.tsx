@@ -31,7 +31,7 @@ export default function EditClientComponent( {idClient} : any ){
   async function fetchClientData() {
     try {
       const response = await axios.get(`${BACKEND_URL}/${idClient}`);
-      setClientData(response.data); // Assume-se que response.data contém os dados do cliente
+      setClientData(response.data);
     } catch (error) {
       console.log("Erro ao buscar dados do cliente:", error);
     }

@@ -4,22 +4,15 @@ import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
 import { useParams } from "next/navigation";
 import { ThemeProvider } from "styled-components";
-import {
-  ButtonDownload,
-  ContainerDataClient,
-  ContainerInformation,
-  Header,
-  ImageContainer,
-  MainContainer,
-} from "./styles";
+
 import { Download } from "lucide-react";
 
-import kelPrintImage from "../../../../../../public/kelprint.jpg";
 import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
+import { ButtonDownload, ContainerDataClient, MainContainer } from "./styles";
 
 interface Order {
   id: string;
@@ -91,7 +84,7 @@ export default function Invoice() {
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
 
         // Adjust image width and height in PDF
-        const width = imgWidth * ratio - 50;
+        const width = imgWidth * ratio - 110;
         const height = imgHeight * ratio -5;
 
         // Adjust to center and expand as much as possible without distorting
@@ -114,37 +107,19 @@ export default function Invoice() {
       <GlobalStyles />
       <div className="container">
         <MainContainer>
-          <Header>
-            <ImageContainer src={kelPrintImage} alt="Logo da KelPrint" />
-            <span>KelPrint</span>
-            <span>Av. Antônio Ricardo, N.º 10 - CENTRO</span>
-            <span>Aurora-CE</span>
-            <span>CNPJ: 45.904.611/0001-00</span>
-            <span>Email: kellaurora@gmail.com</span>
-          </Header>
-
-          <ContainerInformation>
-            <span>Informações do cliente</span>
-          </ContainerInformation>
           {clientData && (
             <ContainerDataClient>
               <span><strong> Nome do cliente:</strong> {clientData.name} </span>
               <span><strong> Número do cliente:</strong> {clientData.number} </span>
             </ContainerDataClient>
           )}
-          <ContainerInformation>
-            <span>Informações do pedido</span>
-          </ContainerInformation>
-
           {orderData && (
             <ContainerDataClient>
+              <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
+              <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
               <span>
                 <strong> Descrição do pedido: </strong>{orderData.orderDescription}
               </span>
-              <span> <strong>Valor por peça:</strong> {orderData.valuePerUnit} </span>
-              <span><strong>Valor total:</strong> {orderData.totalValue} </span>
-              <span><strong>Valor de entrada:</strong> 500 </span>
-              <span><strong>Tipo de pagamento:</strong> Pix </span>          
               <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
               <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
               <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
@@ -152,9 +127,31 @@ export default function Invoice() {
               <span>
               <strong> Comentário:</strong> {orderData.comments}
               </span>
+            </ContainerDataClient>
+          )}
+          </MainContainer>
+
+          <MainContainer>
+          {clientData && (
+            <ContainerDataClient>
+              <span><strong> Nome do cliente:</strong> {clientData.name} </span>
+              <span><strong> Número do cliente:</strong> {clientData.number} </span>
+            </ContainerDataClient>
+          )}
+          {orderData && (
+            <ContainerDataClient>
               <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
               <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
-              <span><strong>Estado do pedido:</strong> {orderData.finished ? "Finalizado" : "Em andamento"}</span>
+              <span>
+                <strong> Descrição do pedido: </strong>{orderData.orderDescription}
+              </span>
+              <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
+              <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
+              <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
+              <span><strong>Tipo da malha:</strong> {orderData.kindOfFabric}</span>
+              <span>
+              <strong> Comentário:</strong> {orderData.comments}
+              </span>
             </ContainerDataClient>
           )}
           </MainContainer>

@@ -1,6 +1,6 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Check, CircleSlash2, FileText, Loader, Pen, Trash2 } from "lucide-react";
+import { Check, CircleSlash2, FileText, Loader, Pen, Scissors, Trash2 } from "lucide-react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
@@ -130,6 +130,11 @@ export default function OrderList({ clientId, searchValue} : any) {
                   <Link href={`/customer-registration/invoice/${order.id}`}>
                     <DocButton>
                       <FileText width={19} />
+                    </DocButton>
+                  </Link>
+                  <Link href={`/customer-registration/production/${order.id}`}>
+                    <DocButton>
+                      <Scissors width={19} />
                     </DocButton>
                   </Link>
                 </EditButtons>
