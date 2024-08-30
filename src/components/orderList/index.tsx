@@ -21,6 +21,8 @@ interface OrderProps {
   comments: string;
   creationTimestamp: string;
   deliveryDate: string ;
+  inputValue: string,
+  paymentType: string,
   finished: boolean;
 }
 
@@ -108,6 +110,8 @@ export default function OrderList({ clientId, searchValue} : any) {
               <span>Descrição: {order.orderDescription}</span>
               <span>Valor por unidade: {order.valuePerUnit} </span>
               <span>Valor total: {order.totalValue} </span>
+              <span>Entrada: {order.inputValue} </span>
+              <span>Tipo de pagamento: {order.paymentType} </span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>
@@ -149,6 +153,8 @@ export default function OrderList({ clientId, searchValue} : any) {
               <span>Descrição: {order.orderDescription}</span>
               <span>Valor por unidade: {order.valuePerUnit} </span>
               <span>Valor total: {order.totalValue} </span>
+              <span>Entrada: {order.inputValue} </span>
+              <span>Tipo de pagamento: {order.paymentType} </span>
               <span>Quantidade: {order.amount}</span>
               <span>Tamanhos: {order.sizes}</span>
               <span>Tipo de tecido: {order.kindOfFabric}</span>
@@ -170,6 +176,11 @@ export default function OrderList({ clientId, searchValue} : any) {
                   <Link href={`/customer-registration/invoice/${order.id}`}>
                     <DocButton>
                       <FileText width={19} />
+                    </DocButton>
+                  </Link>
+                  <Link href={`/customer-registration/production/${order.id}`}>
+                    <DocButton>
+                      <Scissors width={19} />
                     </DocButton>
                   </Link>
                 </EditButtons>

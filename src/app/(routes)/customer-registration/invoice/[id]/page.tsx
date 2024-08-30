@@ -32,6 +32,8 @@ interface Order {
   typeOfCollar: string;
   comments: string;
   deliveryDate: string;
+  inputValue: string;
+  paymentType: string;
   finished: boolean;
   creationTimestamp: string;
   updateTimestamp: string;
@@ -92,7 +94,7 @@ export default function Invoice() {
 
         // Adjust image width and height in PDF
         const width = imgWidth * ratio - 50;
-        const height = imgHeight * ratio -5;
+        const height = imgHeight * ratio -20;
 
         // Adjust to center and expand as much as possible without distorting
         const x = (pdfWidth - width) / 2;
@@ -143,8 +145,8 @@ export default function Invoice() {
               </span>
               <span> <strong>Valor por peça:</strong> {orderData.valuePerUnit} </span>
               <span><strong>Valor total:</strong> {orderData.totalValue} </span>
-              <span><strong>Valor de entrada:</strong> 500 </span>
-              <span><strong>Tipo de pagamento:</strong> Pix </span>          
+              <span><strong>Valor de entrada:</strong> {orderData.inputValue} </span>
+              <span><strong>Tipo de pagamento:</strong> {orderData.paymentType} </span>          
               <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
               <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
               <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>

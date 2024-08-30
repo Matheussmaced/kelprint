@@ -20,6 +20,8 @@ interface FormDataToJsonMapperProps{
   typeOfCollar: string,
   comments: string,
   deliveryDate: string
+  paymentType: string
+  inputValue: string
 }
 
 function formDataToJsonMapper(data: FormDataToJsonMapperProps):string{
@@ -42,6 +44,8 @@ export default function RegisterOrder(){
       deliveryDate: e.target.deliveryDate.value,
       valuePerUnit: e.target.valuePerUnit.value,
       totalValue: e.target.totalValue.value,
+      paymentType: e.target.paymentType.value,
+      inputValue: e.target.inputValue.value
   }
 
 
@@ -51,6 +55,8 @@ export default function RegisterOrder(){
   if(formData.orderDescription &&
     formData.totalValue &&
     formData.valuePerUnit &&
+    formData.paymentType &&
+    formData.inputValue &&
     formData.amount &&
     formData.sizes &&
     formData.kindOfFabric &&
@@ -100,6 +106,16 @@ export default function RegisterOrder(){
           <div>
             <label>Valor total</label>
               <input type="text" name="totalValue"/>
+          </div>
+
+          <div>
+            <label>Entrada</label>
+              <input type="text" name="inputValue"/>
+          </div>
+
+          <div>
+            <label>Tipo de pagamento</label>
+              <input type="text" name="paymentType"/>
           </div>
          
           <div>

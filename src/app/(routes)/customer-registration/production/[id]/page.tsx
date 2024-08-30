@@ -84,8 +84,8 @@ export default function Invoice() {
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
 
         // Adjust image width and height in PDF
-        const width = imgWidth * ratio - 110;
-        const height = imgHeight * ratio -5;
+        const width = imgWidth * ratio - 250;
+        const height = imgHeight * ratio -30;
 
         // Adjust to center and expand as much as possible without distorting
         const x = (pdfWidth - width) / 2;
@@ -110,7 +110,6 @@ export default function Invoice() {
           {clientData && (
             <ContainerDataClient>
               <span><strong> Nome do cliente:</strong> {clientData.name} </span>
-              <span><strong> Número do cliente:</strong> {clientData.number} </span>
             </ContainerDataClient>
           )}
           {orderData && (
@@ -135,7 +134,6 @@ export default function Invoice() {
           {clientData && (
             <ContainerDataClient>
               <span><strong> Nome do cliente:</strong> {clientData.name} </span>
-              <span><strong> Número do cliente:</strong> {clientData.number} </span>
             </ContainerDataClient>
           )}
           {orderData && (

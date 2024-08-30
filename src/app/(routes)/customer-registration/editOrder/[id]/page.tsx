@@ -19,7 +19,9 @@ interface FormDataToJsonMapperProps {
   kindOfFabric: string,
   typeOfCollar: string,
   comments: string,
-  deliveryDate: string
+  deliveryDate: string,
+  paymentType: string,
+  inputValue: string
 }
 
 function formDataToJsonMapper(data: Partial<FormDataToJsonMapperProps>): string {
@@ -61,6 +63,8 @@ export default function EditClientOrder() {
       deliveryDate: e.target.deliveryDate.value || orderData?.deliveryDate,
       totalValue: e.target.totalValue.value || orderData?.totalValue,
       valuePerUnit: e.target.valuePerUnit.value || orderData?.valuePerUnit,
+      inputValue: e.target.inputValue.value || orderData?.inputValue,
+      paymentType: e.target.paymentType.value || orderData?.paymentType,
     };
 
     const jsonData = formDataToJsonMapper(formData);
@@ -107,6 +111,16 @@ export default function EditClientOrder() {
             <div>
               <label>Valor total</label>
               <input type="text" name="totalValue" defaultValue={orderData?.totalValue || ""} />
+            </div>
+
+            <div>
+              <label>Entrada</label>
+              <input type="text" name="inputValue" defaultValue={orderData?.inputValue || ""}/>
+            </div>
+
+            <div>
+              <label>Tipo de pagamento</label>
+              <input type="text" name="paymentType" defaultValue={orderData?.paymentType || ""}/>
             </div>
 
             <div>
