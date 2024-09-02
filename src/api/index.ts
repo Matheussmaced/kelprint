@@ -1,1 +1,1 @@
-export const BACKEND_URL:string = "https://cadastro-de-pedidos.onrender.com/client";
+export const BACKEND_URL:string = "http://localhost:8080/client";
