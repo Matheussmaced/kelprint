@@ -22,6 +22,16 @@ export const MainFinishedFalse = styled.main`
   border: 2px solid ${(props) => props.theme["button-orange"]};
 `
 
+export const MainFinishedDanger = styled.main`
+  margin: 1rem auto;
+  max-width: 60rem;
+  padding: 0 1rem;
+  border-radius: 6px;
+
+  background-color: ${(props) => props.theme["gray-300"]};
+  border: 2px solid ${(props) => props.theme["button-red"]};
+`
+
 export const InformationContainerMaster = styled.div`
   display: flex;
   align-items: center;
