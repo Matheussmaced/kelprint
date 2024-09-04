@@ -10,7 +10,7 @@ import {
   Loading,
   Main,
   MainFinishedFalse,
-  MainFinishedDanger // Importar o novo componente estilizado
+  MainFinishedDanger
 } from "./styles";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
@@ -31,28 +31,28 @@ interface ClientInfoProps {
 export default function ClientList({ clients: initialClient }: ClientInfoProps) {
   const [client, setClient] = useState(initialClient);
   const [clientId, setClientId] = useState("");
-  const [dangerClientId, setDangerClientId] = useState(""); // Estado para armazenar o clientId em perigo
+  const [dangerClientIds, setDangerClientIds] = useState<string[]>([]); // Array para armazenar os clientIds perigosos
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
 
   useEffect(() => {
-    // Recupera o dangerClientId do localStorage ao montar o componente
-    const storedDangerClientId = localStorage.getItem("dangerClientId");
-    if (storedDangerClientId) {
-      setDangerClientId(storedDangerClientId);
+    // Recupera os dangerClientIds do localStorage ao montar o componente
+    const storedDangerClientIds = localStorage.getItem("dangerClientIds");
+    if (storedDangerClientIds) {
+      setDangerClientIds(JSON.parse(storedDangerClientIds));
     }
   }, []);
 
   useEffect(() => {
-    // Armazena o dangerClientId no localStorage sempre que ele mudar
-    if (dangerClientId) {
-      localStorage.setItem("dangerClientId", dangerClientId);
+    // Armazena os dangerClientIds no localStorage sempre que eles mudarem
+    if (dangerClientIds.length > 0) {
+      localStorage.setItem("dangerClientIds", JSON.stringify(dangerClientIds));
     } else {
-      localStorage.removeItem("dangerClientId");
+      localStorage.removeItem("dangerClientIds");
     }
-  }, [dangerClientId]);
+  }, [dangerClientIds]);
 
   const formatClientId = (id: string) => {
     return id.length > 4 ? `...${id.slice(-4)}` : id;
@@ -69,10 +69,10 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
 
   const toggleDanger = (id: string) => {
     // Alterna o estado de perigo para o clientId específico
-    if (dangerClientId === id) {
-      setDangerClientId(""); // Se já estiver em perigo, desativa
+    if (dangerClientIds.includes(id)) {
+      setDangerClientIds(dangerClientIds.filter((dangerId) => dangerId !== id)); // Remove se já estiver em perigo
     } else {
-      setDangerClientId(id); // Ativa o perigo para o clientId clicado
+      setDangerClientIds([...dangerClientIds, id]); // Adiciona o clientId ao array de IDs perigosos
     }
   };
 
@@ -99,7 +99,7 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
 
           // Determina o componente a ser renderizado com base no estado de perigo e nos pedidos
           let ComponentToRender;
-          if (dangerClientId === client.clientId) {
+          if (dangerClientIds.includes(client.clientId)) {
             ComponentToRender = MainFinishedDanger;
           } else if (hasUnfinishedOrders) {
             ComponentToRender = MainFinishedFalse;
