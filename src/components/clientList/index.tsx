@@ -10,7 +10,7 @@ import {
   Loading,
   Main,
   MainFinishedFalse,
-  MainFinishedDanger // Importar o novo componente estilizado
+  MainFinishedDanger
 } from "./styles";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
@@ -19,14 +19,13 @@ import { format } from "date-fns";
 
 interface clientOrderProps {
   finished: boolean;
-  deliveryDate: string;
+  deliveryDate: string; // Adicionei a data de entrega
 }
 interface ClientInfoProps {
   clients: {
     clientName: string;
     clientNumber: string;
     clientId: string;
-    creationTimestamp: string;
     clientOrders: clientOrderProps[];
   }[];
 }
@@ -34,35 +33,31 @@ interface ClientInfoProps {
 export default function ClientList({ clients: initialClient }: ClientInfoProps) {
   const [client, setClient] = useState(initialClient);
   const [clientId, setClientId] = useState("");
-  const [dangerClientId, setDangerClientId] = useState("");
+  const [dangerClientIds, setDangerClientIds] = useState<string[]>([]); // Array para armazenar os clientIds perigosos
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
 
   useEffect(() => {
-    const storedDangerClientId = localStorage.getItem("dangerClientId");
-    if (storedDangerClientId) {
-      setDangerClientId(storedDangerClientId);
+    // Recupera os dangerClientIds do localStorage ao montar o componente
+    const storedDangerClientIds = localStorage.getItem("dangerClientIds");
+    if (storedDangerClientIds) {
+      setDangerClientIds(JSON.parse(storedDangerClientIds));
     }
   }, []);
 
   useEffect(() => {
-    if (dangerClientId) {
-      localStorage.setItem("dangerClientId", dangerClientId);
+    // Armazena os dangerClientIds no localStorage sempre que eles mudarem
+    if (dangerClientIds.length > 0) {
+      localStorage.setItem("dangerClientIds", JSON.stringify(dangerClientIds));
     } else {
-      localStorage.removeItem("dangerClientId");
+      localStorage.removeItem("dangerClientIds");
     }
-  }, [dangerClientId]);
+  }, [dangerClientIds]);
 
-  const formatCreationTimestamp = (timestamp: string) => {
-    try {
-      const date = new Date(timestamp);
-      return format(date, "MMMM yyyy");
-    } catch (error) {
-      console.error("Erro ao formatar a data:", error);
-      return "Data inválida";
-    }
+  const formatClientId = (id: string) => {
+    return id.length > 4 ? `...${id.slice(-4)}` : id;
   };
 
   const convertToDate = (dateString: string) => {
@@ -87,7 +82,6 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
     return format(closestDate, "dd/MM/yyyy");
   };
 
-  // Função para verificar se há pedidos atrasados
   const hasLateOrders = (orders: clientOrderProps[]) => {
     const today = new Date();
     return orders.some(order => !order.finished && convertToDate(order.deliveryDate) < today);
@@ -95,7 +89,7 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
 
   const deleteClient = (id: string) => {
     axios.delete(`${BACKEND_URL}/${id}`);
-    setClient(client.filter(clients => clients.clientId !== id));
+    setClient(client.filter((clients) => clients.clientId !== id));
   };
 
   const editClient = (id: string) => {
@@ -103,10 +97,11 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   };
 
   const toggleDanger = (id: string) => {
-    if (dangerClientId === id) {
-      setDangerClientId("");
+    // Alterna o estado de perigo para o clientId específico
+    if (dangerClientIds.includes(id)) {
+      setDangerClientIds(dangerClientIds.filter((dangerId) => dangerId !== id)); // Remove se já estiver em perigo
     } else {
-      setDangerClientId(id);
+      setDangerClientIds([...dangerClientIds, id]); // Adiciona o clientId ao array de IDs perigosos
     }
   };
 
@@ -127,20 +122,20 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
       <>
         {client.map((client, index) => {
           const hasUnfinishedOrders = client.clientOrders.some(
-            order => !order.finished
+            (order) => !order.finished
           );
           const allOrdersFinished = client.clientOrders.every(
-            order => order.finished
+            (order) => order.finished
           );
           const hasLateOrder = hasLateOrders(client.clientOrders);
 
           let ComponentToRender;
-          if (dangerClientId === client.clientId) {
+          if (dangerClientIds.includes(client.clientId)) {
             ComponentToRender = MainFinishedDanger;
           } else if (hasUnfinishedOrders) {
             ComponentToRender = MainFinishedFalse;
           } else {
-            ComponentToRender = Main;
+            ComponentToRender = Main; // Todos os pedidos estão finalizados
           }
 
           const closestDeliveryDate = getClosestDeliveryDate(client.clientOrders);
@@ -186,4 +181,3 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
     </ThemeProvider>
   );
 }
-
