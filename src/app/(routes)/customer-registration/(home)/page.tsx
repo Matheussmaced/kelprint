@@ -12,6 +12,7 @@ import SearchBar from "@/components/searchBar";
 
 interface clientOrderProps {
   finished: boolean;
+  deliveryDate: string;
 }
 interface clientInfoProps {
   clientName: string;
