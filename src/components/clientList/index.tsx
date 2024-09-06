@@ -13,13 +13,13 @@ import {
   MainFinishedDanger
 } from "./styles";
 import axios from "axios";
-import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns"; // Importando função isToday
+import { BACKEND_URL } from "@/api";
 
 interface clientOrderProps {
   finished: boolean;
-  deliveryDate: string; // Adicionei a data de entrega
+  deliveryDate: string;
 }
 interface ClientInfoProps {
   clients: {
@@ -33,14 +33,13 @@ interface ClientInfoProps {
 export default function ClientList({ clients: initialClient }: ClientInfoProps) {
   const [client, setClient] = useState(initialClient);
   const [clientId, setClientId] = useState("");
-  const [dangerClientIds, setDangerClientIds] = useState<string[]>([]); // Array para armazenar os clientIds perigosos
+  const [dangerClientIds, setDangerClientIds] = useState<string[]>([]);
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
 
   useEffect(() => {
-    // Recupera os dangerClientIds do localStorage ao montar o componente
     const storedDangerClientIds = localStorage.getItem("dangerClientIds");
     if (storedDangerClientIds) {
       setDangerClientIds(JSON.parse(storedDangerClientIds));
@@ -48,7 +47,6 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   }, []);
 
   useEffect(() => {
-    // Armazena os dangerClientIds no localStorage sempre que eles mudarem
     if (dangerClientIds.length > 0) {
       localStorage.setItem("dangerClientIds", JSON.stringify(dangerClientIds));
     } else {
@@ -87,6 +85,10 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
     return orders.some(order => !order.finished && convertToDate(order.deliveryDate) < today);
   };
 
+  const hasOrdersForToday = (orders: clientOrderProps[]) => {
+    return orders.some(order => isToday(convertToDate(order.deliveryDate)) && !order.finished);
+  };
+
   const deleteClient = (id: string) => {
     axios.delete(`${BACKEND_URL}/${id}`);
     setClient(client.filter((clients) => clients.clientId !== id));
@@ -97,11 +99,10 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   };
 
   const toggleDanger = (id: string) => {
-    // Alterna o estado de perigo para o clientId específico
     if (dangerClientIds.includes(id)) {
-      setDangerClientIds(dangerClientIds.filter((dangerId) => dangerId !== id)); // Remove se já estiver em perigo
+      setDangerClientIds(dangerClientIds.filter((dangerId) => dangerId !== id));
     } else {
-      setDangerClientIds([...dangerClientIds, id]); // Adiciona o clientId ao array de IDs perigosos
+      setDangerClientIds([...dangerClientIds, id]);
     }
   };
 
@@ -128,6 +129,7 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
             (order) => order.finished
           );
           const hasLateOrder = hasLateOrders(client.clientOrders);
+          const hasOrderForToday = hasOrdersForToday(client.clientOrders); // Verifica pedidos para hoje
 
           let ComponentToRender;
           if (dangerClientIds.includes(client.clientId)) {
@@ -135,7 +137,7 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
           } else if (hasUnfinishedOrders) {
             ComponentToRender = MainFinishedFalse;
           } else {
-            ComponentToRender = Main; // Todos os pedidos estão finalizados
+            ComponentToRender = Main;
           }
 
           const closestDeliveryDate = getClosestDeliveryDate(client.clientOrders);
@@ -152,11 +154,13 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
                 <span>{client.clientNumber}</span>
                 <span>
                   {
-                    hasLateOrder 
-                      ? "Há pedidos atrasados"  // Exibe se houver pedidos atrasados
-                      : allOrdersFinished 
-                        ? "Nenhum pedido pendente"  // Exibe se todos os pedidos estiverem finalizados
-                        : closestDeliveryDate || "Nenhuma data futura"  // Exibe a data mais próxima se houver pedidos pendentes
+                    hasOrderForToday 
+                      ? "Há pedido para hoje"  // Exibe se houver pedidos para hoje
+                      : hasLateOrder 
+                        ? "Há pedidos atrasados"  // Exibe se houver pedidos atrasados
+                        : allOrdersFinished 
+                          ? "Nenhum pedido pendente"  // Exibe se todos os pedidos estiverem finalizados
+                          : closestDeliveryDate || "Nenhuma data futura"  // Exibe a data mais próxima se houver pedidos pendentes
                   }
                 </span>
 
