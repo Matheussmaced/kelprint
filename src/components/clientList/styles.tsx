@@ -12,6 +12,20 @@ export const Main = styled.main`
   background-color: ${(props) => props.theme["gray-300"]};
 `
 
+export const MonthContainer = styled.div`
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+  }
+`;
+
+
 export const MainFinishedFalse = styled.main`
   margin: 1rem auto;
   max-width: 60rem;

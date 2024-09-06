@@ -15,15 +15,18 @@ import {
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 interface clientOrderProps {
   finished: boolean;
+  deliveryDate: string;
 }
 interface ClientInfoProps {
   clients: {
     clientName: string;
     clientNumber: string;
     clientId: string;
+    creationTimestamp: string;
     clientOrders: clientOrderProps[];
   }[];
 }
@@ -31,14 +34,13 @@ interface ClientInfoProps {
 export default function ClientList({ clients: initialClient }: ClientInfoProps) {
   const [client, setClient] = useState(initialClient);
   const [clientId, setClientId] = useState("");
-  const [dangerClientId, setDangerClientId] = useState(""); // Estado para armazenar o clientId em perigo
+  const [dangerClientId, setDangerClientId] = useState("");
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
 
   useEffect(() => {
-    // Recupera o dangerClientId do localStorage ao montar o componente
     const storedDangerClientId = localStorage.getItem("dangerClientId");
     if (storedDangerClientId) {
       setDangerClientId(storedDangerClientId);
@@ -46,7 +48,6 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   }, []);
 
   useEffect(() => {
-    // Armazena o dangerClientId no localStorage sempre que ele mudar
     if (dangerClientId) {
       localStorage.setItem("dangerClientId", dangerClientId);
     } else {
@@ -54,13 +55,47 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
     }
   }, [dangerClientId]);
 
-  const formatClientId = (id: string) => {
-    return id.length > 4 ? `...${id.slice(-4)}` : id;
+  const formatCreationTimestamp = (timestamp: string) => {
+    try {
+      const date = new Date(timestamp);
+      return format(date, "MMMM yyyy");
+    } catch (error) {
+      console.error("Erro ao formatar a data:", error);
+      return "Data inválida";
+    }
+  };
+
+  const convertToDate = (dateString: string) => {
+    const [day, month, year] = dateString.split("/").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const getClosestDeliveryDate = (orders: clientOrderProps[]) => {
+    const today = new Date();
+    const upcomingDates = orders
+      .map(order => convertToDate(order.deliveryDate))
+      .filter(date => date >= today);
+
+    if (upcomingDates.length === 0) {
+      return null;
+    }
+
+    const closestDate = new Date(
+      Math.min(...upcomingDates.map(date => date.getTime()))
+    );
+
+    return format(closestDate, "dd/MM/yyyy");
+  };
+
+  // Função para verificar se há pedidos atrasados
+  const hasLateOrders = (orders: clientOrderProps[]) => {
+    const today = new Date();
+    return orders.some(order => !order.finished && convertToDate(order.deliveryDate) < today);
   };
 
   const deleteClient = (id: string) => {
     axios.delete(`${BACKEND_URL}/${id}`);
-    setClient(client.filter((clients) => clients.clientId !== id));
+    setClient(client.filter(clients => clients.clientId !== id));
   };
 
   const editClient = (id: string) => {
@@ -68,11 +103,10 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   };
 
   const toggleDanger = (id: string) => {
-    // Alterna o estado de perigo para o clientId específico
     if (dangerClientId === id) {
-      setDangerClientId(""); // Se já estiver em perigo, desativa
+      setDangerClientId("");
     } else {
-      setDangerClientId(id); // Ativa o perigo para o clientId clicado
+      setDangerClientId(id);
     }
   };
 
@@ -92,20 +126,24 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
       <GlobalStyles />
       <>
         {client.map((client, index) => {
-          // Verifica se há pedidos não finalizados
           const hasUnfinishedOrders = client.clientOrders.some(
-            (order) => !order.finished
+            order => !order.finished
           );
+          const allOrdersFinished = client.clientOrders.every(
+            order => order.finished
+          );
+          const hasLateOrder = hasLateOrders(client.clientOrders);
 
-          // Determina o componente a ser renderizado com base no estado de perigo e nos pedidos
           let ComponentToRender;
           if (dangerClientId === client.clientId) {
             ComponentToRender = MainFinishedDanger;
           } else if (hasUnfinishedOrders) {
             ComponentToRender = MainFinishedFalse;
           } else {
-            ComponentToRender = Main; // Todos os pedidos estão finalizados
+            ComponentToRender = Main;
           }
+
+          const closestDeliveryDate = getClosestDeliveryDate(client.clientOrders);
 
           return (
             <ComponentToRender key={client.clientId}>
@@ -117,7 +155,15 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
                   <span>{client.clientName}</span>
                 </LinkContainer>
                 <span>{client.clientNumber}</span>
-                <span>{formatClientId(client.clientId)}</span>
+                <span>
+                  {
+                    hasLateOrder 
+                      ? "Há pedidos atrasados"  // Exibe se houver pedidos atrasados
+                      : allOrdersFinished 
+                        ? "Nenhum pedido pendente"  // Exibe se todos os pedidos estiverem finalizados
+                        : closestDeliveryDate || "Nenhuma data futura"  // Exibe a data mais próxima se houver pedidos pendentes
+                  }
+                </span>
 
                 <ButtonsContainer>
                   <button onClick={() => toggleDanger(client.clientId)}>
@@ -140,3 +186,4 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
     </ThemeProvider>
   );
 }
+
