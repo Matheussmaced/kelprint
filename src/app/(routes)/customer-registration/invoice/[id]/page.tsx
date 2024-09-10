@@ -12,14 +12,15 @@ import {
   ImageContainer,
   MainContainer,
 } from "./styles";
-import { Download } from "lucide-react";
+import { Download, Loader } from "lucide-react";
 
-import kelPrintImage from "../../../../../../public/kelprint.jpg";
+import kelPrintImage from "../../../../../../public/kelprint.png";
 import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
+import { Loading } from "@/components/clientList/styles";
 
 interface Order {
   id: string;
@@ -49,31 +50,33 @@ export default function Invoice() {
   const idOrder = params.id;
 
   const [loader, setLoader] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const [orderData, setOrderData] = useState<Order | null>(null);
   const [clientData, setClientData] = useState<Client | null>(null);
 
   useEffect(() => {
-
-
-  const fetchClientAndOrderData = async () => {
-    try {
-        const response = await axios.get(BACKEND_URL)
+    const fetchClientAndOrderData = async () => {
+      try {
+        const response = await axios.get(BACKEND_URL);
         const clients = response.data;
 
-        for(let client of clients){
-          const order = client.order.find((o:Order) => o.id === idOrder);
-          if(order){
+        for (let client of clients) {
+          const order = client.order.find((o: Order) => o.id === idOrder);
+          if (order) {
             setOrderData(order);
-            setClientData({name: client.name, number: client.number})
+            setClientData({ name: client.name, number: client.number });
             break;
           }
         }
       } catch (error) {
-        console.error("Erro ao buscas dados do pedido", error)
+        console.error("Erro ao buscar dados do pedido", error);
+      } finally {
+        setLoadingData(false);
       }
-    }
+    };
+
     fetchClientAndOrderData();
-  }, [idOrder])
+  }, [idOrder]);
 
   const downloadPDF = () => {
     const capture = document.querySelector(".container") as HTMLElement;
@@ -82,25 +85,20 @@ export default function Invoice() {
       html2canvas(capture, { scale: 3 }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
 
-        // Set PDF dimensions
         const pdf = new jsPDF("p", "mm", "a4");
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        // Calculate image aspect ratio
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
 
-        // Adjust image width and height in PDF
         const width = imgWidth * ratio - 50;
-        const height = imgHeight * ratio -20;
+        const height = imgHeight * ratio - 20;
 
-        // Adjust to center and expand as much as possible without distorting
         const x = (pdfWidth - width) / 2;
         const y = (pdfHeight - height) / 2;
 
-        // Add image to PDF
         pdf.addImage(imgData, "PNG", x, y, width, height);
         setLoader(false);
         pdf.save("arquivo.pdf");
@@ -109,7 +107,17 @@ export default function Invoice() {
       console.log("Elemento com a classe 'container' não encontrado");
     }
   };
-  
+
+  if (loadingData) {
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <Loading>
+          <Loader width={25} />
+          <span>Carregando dados...</span>
+        </Loading>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -152,19 +160,19 @@ export default function Invoice() {
               <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
               <span><strong>Tipo da malha:</strong> {orderData.kindOfFabric}</span>
               <span>
-              <strong> Comentário:</strong> {orderData.comments}
+                <strong> Comentário:</strong> {orderData.comments}
               </span>
               <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
               <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
               <span><strong>Estado do pedido:</strong> {orderData.finished ? "Finalizado" : "Em andamento"}</span>
             </ContainerDataClient>
           )}
-          </MainContainer>
+        </MainContainer>
       </div>
-            <ButtonDownload onClick={downloadPDF} disabled={loader}>
-              <Download width={19} />
-              {loader ? <span>Baixando PDF</span> : <span>Baixar em PDF</span>}
-            </ButtonDownload>
+      <ButtonDownload onClick={downloadPDF} disabled={loader}>
+        <Download width={19} />
+        {loader ? <span>Baixando PDF</span> : <span>Baixar em PDF</span>}
+      </ButtonDownload>
     </ThemeProvider>
   );
 }
