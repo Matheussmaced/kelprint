@@ -140,7 +140,15 @@ export default function RegisterOrder(){
 
           <div>
             <label>Comentários</label>
-              <input type="text" name="comments"/>
+              <textarea
+                name="comments"
+                rows={4}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                  }
+                }}
+              />
           </div>
 
           <div>

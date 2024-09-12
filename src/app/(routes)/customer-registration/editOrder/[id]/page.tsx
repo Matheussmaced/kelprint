@@ -144,8 +144,17 @@ export default function EditClientOrder() {
             </div>
 
             <div>
-              <label>Comentários</label>
-              <input type="text" name="comments" defaultValue={orderData?.comments || ""} />
+            <label>Comentários</label>
+              <textarea
+                defaultValue={orderData?.comments || ""}
+                name="comments"
+                rows={4}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                  }
+                }}
+              />
             </div>
 
             <div>

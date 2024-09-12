@@ -149,17 +149,17 @@ export default function OrderList({ clientId, searchValue} : any) {
             </Ok>
           :
             <Alert key={index}>
-              <span>Pedido de número: {index + 1}</span>
-              <span>Descrição: {order.orderDescription}</span>
-              <span>Valor por unidade: {order.valuePerUnit} </span>
-              <span>Valor total: {order.totalValue} </span>
-              <span>Entrada: {order.inputValue} </span>
-              <span>Tipo de pagamento: {order.paymentType} </span>
-              <span>Quantidade: {order.amount}</span>
-              <span>Tamanhos: {order.sizes}</span>
-              <span>Tipo de tecido: {order.kindOfFabric}</span>
-              <span>Tipo da gola: {order.typeOfCollar}</span>
-              <span>Comentário: {order.comments}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Pedido de número: {index + 1}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Descrição: {order.orderDescription}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Valor por unidade: {order.valuePerUnit} </span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Valor total: {order.totalValue} </span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Entrada: {order.inputValue} </span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Tipo de pagamento: {order.paymentType} </span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Quantidade: {order.amount}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Tamanhos: {order.sizes}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Tipo de tecido: {order.kindOfFabric}</span>
+              <span  style={{ whiteSpace: "pre-wrap" }}>Tipo da gola: {order.typeOfCollar}</span>
+              <span style={{ whiteSpace: "pre-wrap" }}>Comentário: {order.comments}</span>
               <span>Data do pedido: {formatterDate.format(new Date(order.creationTimestamp))}</span>
               <span>Data de entrega: {order.deliveryDate}</span>
               <span>Andamento do pedido: em andamento</span>
