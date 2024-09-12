@@ -5,14 +5,15 @@ import { defaultTheme } from "@/themes/default";
 import { useParams } from "next/navigation";
 import { ThemeProvider } from "styled-components";
 
-import { Download, Minus, Plus } from "lucide-react";
+import { Download, Minus, Plus, Loader } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
-import { ButtonDownload, ButtonsAddContainers, ContainerDataClient, MainContainer, MinusButton, PlusButton } from "./styles";
+import { ButtonDownload, ButtonsAddContainers, ContainerDataClient, MainContainer, MinusButton, PlusButton} from "./styles";
+import { Loading } from "@/components/clientList/styles";
 
 interface Order {
   id: string;
@@ -40,6 +41,7 @@ export default function Invoice() {
   const idOrder = params.id;
 
   const [loader, setLoader] = useState(false);
+  const [loadingData, setLoadingData] = useState(true); // Estado para o carregamento dos dados
   const [orderData, setOrderData] = useState<Order | null>(null);
   const [clientData, setClientData] = useState<Client | null>(null);
   const [containerCount, setContainerCount] = useState(1); // Estado para gerenciar o número de MainContainers
@@ -47,6 +49,7 @@ export default function Invoice() {
   useEffect(() => {
     const fetchClientAndOrderData = async () => {
       try {
+        setLoadingData(true); // Inicia o carregamento
         const response = await axios.get(BACKEND_URL);
         const clients = response.data;
 
@@ -60,6 +63,8 @@ export default function Invoice() {
         }
       } catch (error) {
         console.error("Erro ao buscar dados do pedido", error);
+      } finally {
+        setLoadingData(false); // Finaliza o carregamento
       }
     };
     fetchClientAndOrderData();
@@ -74,28 +79,25 @@ export default function Invoice() {
         const pdf = new jsPDF("p", "mm", "a4");
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-  
+
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
-  
-        // Inicialize com valores padrão
+
         let width = imgWidth * ratio;
         let height = imgHeight * ratio;
-  
+
         if (containerCount === 1) {
-          // Ajustes para um container
           width = imgWidth * ratio - 480;
           height = imgHeight * ratio - 50;
         } else if (containerCount === 2) {
-          // Ajustes para dois containers
           width = imgWidth * ratio - 250;
           height = imgHeight * ratio - 30;
         }
-  
+
         const x = (pdfWidth - width) / 2;
         const y = (pdfHeight - height) / 2;
-  
+
         pdf.addImage(imgData, "PNG", x, y, width, height);
         setLoader(false);
         pdf.save("arquivo.pdf");
@@ -114,6 +116,18 @@ export default function Invoice() {
       setContainerCount((prev) => prev - 1);
     }
   };
+
+  // Exibir container de loading enquanto os dados estão sendo carregados
+  if (loadingData) {
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <Loading>
+          <Loader width={25} />
+          <span>Carregando dados...</span>
+        </Loading>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
