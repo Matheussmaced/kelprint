@@ -90,9 +90,13 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   };
 
   const deleteClient = (id: string) => {
-    axios.delete(`${BACKEND_URL}/${id}`);
-    setClient(client.filter((clients) => clients.clientId !== id));
+    const isConfirmed = window.confirm("Tem certeza que deseja excluir este cliente?");
+    if (isConfirmed) {
+      axios.delete(`${BACKEND_URL}/${id}`);
+      setClient(client.filter((clients) => clients.clientId !== id));
+    }
   };
+  
 
   const editClient = (id: string) => {
     setClientId(id);
