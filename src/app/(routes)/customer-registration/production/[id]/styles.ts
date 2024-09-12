@@ -8,6 +8,42 @@ export const MainContainer = styled.main`
   border: 1px solid ${(props) => props.theme["gray-300"]};
 `
 
+export const ButtonsAddContainers = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  button{
+    padding: 0.2rem 0.4rem;
+  }
+`
+
+export const PlusButton = styled.button`
+  background-color: ${(props) => props.theme["button-green"]};
+  color: ${(props) => props.theme.white};
+
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ;
+
+  &:hover{
+    transform: scale(1.1);
+  }
+`
+
+export const MinusButton = styled.button`
+    background-color: ${(props) => props.theme["button-red"]};
+    color: ${(props) => props.theme.white};
+
+    border: none;
+    cursor: pointer;
+    transition: 0.5s ;
+    
+    &:hover{
+    transform: scale(1.1);
+  }
+`
+
 export const ButtonDownload = styled.button`
     display: flex;
     align-items: center;

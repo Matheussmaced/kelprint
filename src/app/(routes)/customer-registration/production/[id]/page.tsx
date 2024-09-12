@@ -5,20 +5,20 @@ import { defaultTheme } from "@/themes/default";
 import { useParams } from "next/navigation";
 import { ThemeProvider } from "styled-components";
 
-import { Download } from "lucide-react";
+import { Download, Minus, Plus } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
-import { ButtonDownload, ContainerDataClient, MainContainer } from "./styles";
+import { ButtonDownload, ButtonsAddContainers, ContainerDataClient, MainContainer, MinusButton, PlusButton } from "./styles";
 
 interface Order {
   id: string;
   orderDescription: string;
-  totalValue: string,
-  valuePerUnit: string,
+  totalValue: string;
+  valuePerUnit: string;
   amount: number;
   sizes: string;
   kindOfFabric: string;
@@ -42,29 +42,28 @@ export default function Invoice() {
   const [loader, setLoader] = useState(false);
   const [orderData, setOrderData] = useState<Order | null>(null);
   const [clientData, setClientData] = useState<Client | null>(null);
+  const [containerCount, setContainerCount] = useState(1); // Estado para gerenciar o número de MainContainers
 
   useEffect(() => {
-
-
-  const fetchClientAndOrderData = async () => {
-    try {
-        const response = await axios.get(BACKEND_URL)
+    const fetchClientAndOrderData = async () => {
+      try {
+        const response = await axios.get(BACKEND_URL);
         const clients = response.data;
 
-        for(let client of clients){
-          const order = client.order.find((o:Order) => o.id === idOrder);
-          if(order){
+        for (let client of clients) {
+          const order = client.order.find((o: Order) => o.id === idOrder);
+          if (order) {
             setOrderData(order);
-            setClientData({name: client.name, number: client.number})
+            setClientData({ name: client.name, number: client.number });
             break;
           }
         }
       } catch (error) {
-        console.error("Erro ao buscas dados do pedido", error)
+        console.error("Erro ao buscar dados do pedido", error);
       }
-    }
+    };
     fetchClientAndOrderData();
-  }, [idOrder])
+  }, [idOrder]);
 
   const downloadPDF = () => {
     const capture = document.querySelector(".container") as HTMLElement;
@@ -72,26 +71,31 @@ export default function Invoice() {
       setLoader(true);
       html2canvas(capture, { scale: 3 }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-
-        // Set PDF dimensions
         const pdf = new jsPDF("p", "mm", "a4");
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        // Calculate image aspect ratio
+  
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
         const ratio = Math.max(pdfWidth / imgWidth, pdfHeight / imgHeight);
-
-        // Adjust image width and height in PDF
-        const width = imgWidth * ratio - 250;
-        const height = imgHeight * ratio -30;
-
-        // Adjust to center and expand as much as possible without distorting
+  
+        // Inicialize com valores padrão
+        let width = imgWidth * ratio;
+        let height = imgHeight * ratio;
+  
+        if (containerCount === 1) {
+          // Ajustes para um container
+          width = imgWidth * ratio - 480;
+          height = imgHeight * ratio - 50;
+        } else if (containerCount === 2) {
+          // Ajustes para dois containers
+          width = imgWidth * ratio - 250;
+          height = imgHeight * ratio - 30;
+        }
+  
         const x = (pdfWidth - width) / 2;
         const y = (pdfHeight - height) / 2;
-
-        // Add image to PDF
+  
         pdf.addImage(imgData, "PNG", x, y, width, height);
         setLoader(false);
         pdf.save("arquivo.pdf");
@@ -100,64 +104,76 @@ export default function Invoice() {
       console.log("Elemento com a classe 'container' não encontrado");
     }
   };
-  
+
+  const addContainer = () => {
+    setContainerCount((prev) => prev + 1);
+  };
+
+  const removeContainer = () => {
+    if (containerCount > 1) {
+      setContainerCount((prev) => prev - 1);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <div className="container">
-        <MainContainer>
-          {clientData && (
-            <ContainerDataClient>
-              <span><strong> Nome do cliente:</strong> {clientData.name} </span>
-            </ContainerDataClient>
-          )}
-          {orderData && (
-            <ContainerDataClient>
-              <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
-              <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
-              <span>
-                <strong> Descrição do pedido: </strong>{orderData.orderDescription}
-              </span>
-              <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
-              <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
-              <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
-              <span><strong>Tipo da malha:</strong> {orderData.kindOfFabric}</span>
-              <span>
-              <strong> Comentário:</strong> {orderData.comments}
-              </span>
-            </ContainerDataClient>
-          )}
+        {/* Renderizar múltiplos MainContainers com base no estado containerCount */}
+        {Array.from({ length: containerCount }).map((_, index) => (
+          <MainContainer key={index}>
+            {clientData && (
+              <ContainerDataClient>
+                <span>
+                  <strong> Nome do cliente:</strong> {clientData.name}{" "}
+                </span>
+              </ContainerDataClient>
+            )}
+            {orderData && (
+              <ContainerDataClient>
+                <span>
+                  <strong>Data de registro:</strong>{" "}
+                  {new Date(orderData.creationTimestamp).toLocaleDateString()}
+                </span>
+                <span>
+                  <strong>Data de entrega:</strong> {orderData.deliveryDate}
+                </span>
+                <span style={{ whiteSpace: "pre-wrap" }}>
+                  <strong> Descrição do pedido: </strong>
+                  {orderData.orderDescription}
+                </span>
+                <span>
+                  <strong>Quantidade de peças:</strong> {orderData.amount}
+                </span>
+                <span>
+                  <strong>Tamanhos:</strong> {orderData.sizes}
+                </span>
+                <span>
+                  <strong>Tipo da gola:</strong> {orderData.typeOfCollar}
+                </span>
+                <span>
+                  <strong>Tipo da malha:</strong> {orderData.kindOfFabric}
+                </span>
+                <span style={{ whiteSpace: "pre-wrap" }}>
+                  <strong> Comentário:</strong> {orderData.comments}
+                </span>
+              </ContainerDataClient>
+            )}
           </MainContainer>
-
-          <MainContainer>
-          {clientData && (
-            <ContainerDataClient>
-              <span><strong> Nome do cliente:</strong> {clientData.name} </span>
-            </ContainerDataClient>
-          )}
-          {orderData && (
-            <ContainerDataClient>
-              <span><strong>Data de registro:</strong> {new Date(orderData.creationTimestamp).toLocaleDateString()}</span>
-              <span><strong>Data de entrega:</strong> {orderData.deliveryDate}</span>
-              <span>
-                <strong> Descrição do pedido: </strong>{orderData.orderDescription}
-              </span>
-              <span><strong>Quantidade de peças:</strong> {orderData.amount}</span>
-              <span><strong>Tamanhos:</strong> {orderData.sizes}</span>
-              <span><strong>Tipo da gola:</strong> {orderData.typeOfCollar}</span>
-              <span><strong>Tipo da malha:</strong> {orderData.kindOfFabric}</span>
-              <span>
-              <strong> Comentário:</strong> {orderData.comments}
-              </span>
-            </ContainerDataClient>
-          )}
-          </MainContainer>
+        ))}
       </div>
-            <ButtonDownload onClick={downloadPDF} disabled={loader}>
-              <Download width={19} />
-              {loader ? <span>Baixando PDF</span> : <span>Baixar em PDF</span>}
-            </ButtonDownload>
+
+      <ButtonsAddContainers>
+        <PlusButton onClick={addContainer}> <Plus width={16} /> </PlusButton>
+        <MinusButton onClick={removeContainer} disabled={containerCount === 1}>
+          <Minus width={16} />
+        </MinusButton>
+      </ButtonsAddContainers>
+
+      <ButtonDownload onClick={downloadPDF} disabled={loader}>
+        <Download width={19} />
+        {loader ? <span>Baixando PDF</span> : <span>Baixar em PDF</span>}
+      </ButtonDownload>
     </ThemeProvider>
   );
 }
