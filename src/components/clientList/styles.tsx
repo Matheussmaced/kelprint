@@ -61,12 +61,40 @@ export const InformationContainerMaster = styled.div`
 export const ButtonsContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.7rem;
 
   button{
     background-color: transparent;
     border: none;
     cursor: pointer;
+  }
+`
+
+export const TrashButton = styled.div`
+  padding: 0.6rem 0.8rem;
+  background-color: ${(props) => props.theme["button-red"]};
+  border-radius: 6px;
+  color: ${(props) => props.theme.white};
+
+  cursor: pointer;
+  transition: 0.5s;
+
+  &:hover{
+    transform: scale(1.2);
+  }
+`
+
+export const PenButton = styled.div`
+  padding: 0.6rem 0.8rem;
+  background-color: ${(props) => props.theme["button-orange"]};
+  border-radius: 6px;
+  color: ${(props) => props.theme.black};
+
+  cursor: pointer;
+  transition: 0.5s;
+
+  &:hover{
+    transform: scale(1.2);
   }
 `
 

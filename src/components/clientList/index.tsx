@@ -10,7 +10,9 @@ import {
   Loading,
   Main,
   MainFinishedFalse,
-  MainFinishedDanger
+  MainFinishedDanger,
+  TrashButton,
+  PenButton
 } from "./styles";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -145,13 +147,13 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
 
                 <ButtonsContainer>
                   <Link href={`/customer-registration/editClient/${client.clientId}`}>
-                    <button>
-                      <Pen size={16} onClick={() => editClient(client.clientId)} />
-                    </button>
+                    <PenButton>
+                      <Pen size={20} onClick={() => editClient(client.clientId)} />
+                    </PenButton>
                   </Link>
-                  <button onClick={() => deleteClient(client.clientId)}>
-                    <Trash2 size={16} />
-                  </button>
+                  <TrashButton onClick={() => deleteClient(client.clientId)}>
+                    <Trash2 size={20} />
+                  </TrashButton>
                 </ButtonsContainer>
               </InformationContainerMaster>
             </ComponentToRender>
