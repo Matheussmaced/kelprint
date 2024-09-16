@@ -1,6 +1,6 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Loader, Pen, TrafficCone, Trash2 } from "lucide-react";
+import { Loader, Pen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { ThemeProvider } from "styled-components";
 import {
@@ -33,26 +33,10 @@ interface ClientInfoProps {
 export default function ClientList({ clients: initialClient }: ClientInfoProps) {
   const [client, setClient] = useState(initialClient);
   const [clientId, setClientId] = useState("");
-  const [dangerClientIds, setDangerClientIds] = useState<string[]>([]);
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
-
-  useEffect(() => {
-    const storedDangerClientIds = localStorage.getItem("dangerClientIds");
-    if (storedDangerClientIds) {
-      setDangerClientIds(JSON.parse(storedDangerClientIds));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (dangerClientIds.length > 0) {
-      localStorage.setItem("dangerClientIds", JSON.stringify(dangerClientIds));
-    } else {
-      localStorage.removeItem("dangerClientIds");
-    }
-  }, [dangerClientIds]);
 
   const formatClientId = (id: string) => {
     return id.length > 4 ? `...${id.slice(-4)}` : id;
@@ -96,18 +80,9 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
       setClient(client.filter((clients) => clients.clientId !== id));
     }
   };
-  
 
   const editClient = (id: string) => {
     setClientId(id);
-  };
-
-  const toggleDanger = (id: string) => {
-    if (dangerClientIds.includes(id)) {
-      setDangerClientIds(dangerClientIds.filter((dangerId) => dangerId !== id));
-    } else {
-      setDangerClientIds([...dangerClientIds, id]);
-    }
   };
 
   if (!client || client.length === 0) {
@@ -136,7 +111,7 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
           const hasOrderForToday = hasOrdersForToday(client.clientOrders); // Verifica pedidos para hoje
 
           let ComponentToRender;
-          if (dangerClientIds.includes(client.clientId)) {
+          if (hasLateOrder || hasOrderForToday) {
             ComponentToRender = MainFinishedDanger;
           } else if (hasUnfinishedOrders) {
             ComponentToRender = MainFinishedFalse;
@@ -169,9 +144,6 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
                 </span>
 
                 <ButtonsContainer>
-                  <button onClick={() => toggleDanger(client.clientId)}>
-                    <TrafficCone size={18} />
-                  </button>
                   <Link href={`/customer-registration/editClient/${client.clientId}`}>
                     <button>
                       <Pen size={16} onClick={() => editClient(client.clientId)} />
