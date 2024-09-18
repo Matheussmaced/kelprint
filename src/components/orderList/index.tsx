@@ -3,11 +3,13 @@ import { defaultTheme } from "@/themes/default";
 import { Check, CircleSlash2, FileText, Loader, Pen, Scissors, Trash2 } from "lucide-react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
+import  logoKel  from "@/../public/kelprint.png"
 import { BACKEND_URL } from "@/api";
 import { useEffect, useState } from "react";
 import { Alert, ButtonContainer, DocButton, EditButtons, Main, Ok, OkButton, OkButtonRed, PenButton, TrashButton } from "./styles";
 import Link from "next/link";
-import { Loading } from "../clientList/styles";
+import { Loading, LoadingImage } from "../clientList/styles";
+import Image from "next/image";
 
 interface OrderProps {
   id: string,
@@ -68,10 +70,13 @@ export default function OrderList({ clientId, searchValue} : any) {
   if (!client || !client.orders) {
     return(
       <ThemeProvider theme={defaultTheme}>
-        <Loading>
-          <Loader width={25} />
-          <span>Carregando pedidos...</span>
-        </Loading>
+        <LoadingImage>
+          <Image src={logoKel} alt="Carregando" />
+            <div>
+              <span>Carregando pedidos...</span>
+              <Loader width={18} />
+            </div>
+        </LoadingImage>
       </ThemeProvider>
     )
   }

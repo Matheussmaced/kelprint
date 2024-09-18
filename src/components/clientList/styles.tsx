@@ -11,6 +11,41 @@ export const Main = styled.main`
 
   background-color: ${(props) => props.theme["gray-300"]};
 `
+const colorizeAndPulse = keyframes`
+  0% {
+    filter: grayscale(100%);
+    transform: scale(1); /* Tamanho original */
+  }
+  50% {
+    filter: grayscale(0%);
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+  }
+  100% {
+    filter: grayscale(100%);
+    transform: scale(1); /* Volta ao tamanho original */
+  }
+`;
+
+// Componente de carregamento que utiliza a imagem com animação
+export const LoadingImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  animation: ${colorizeAndPulse} 2s linear infinite alternate; /* Animação em loop alternado com pulso */
+  img {
+    width: 150px; /* Tamanho da imagem */
+    height: auto;
+  }
+
+  div{
+    display: flex;
+    align-items: center;
+  }
+`;
 
 export const MonthContainer = styled.div`
   margin-top: 20px;

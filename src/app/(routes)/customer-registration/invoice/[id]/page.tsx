@@ -2,6 +2,7 @@
 
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
+import  logoKel  from "@/../public/kelprint.png"
 import { useParams } from "next/navigation";
 import { ThemeProvider } from "styled-components";
 import {
@@ -20,7 +21,8 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
 import { BACKEND_URL } from "@/api";
-import { Loading } from "@/components/clientList/styles";
+import { Loading, LoadingImage } from "@/components/clientList/styles";
+import Image from "next/image";
 
 interface Order {
   id: string;
@@ -111,10 +113,13 @@ export default function Invoice() {
   if (loadingData) {
     return (
       <ThemeProvider theme={defaultTheme}>
-        <Loading>
-          <Loader width={25} />
-          <span>Carregando dados...</span>
-        </Loading>
+        <LoadingImage>
+          <Image src={logoKel} alt="Carregando" />
+            <div>
+              <span>Carregando dados...</span>
+              <Loader width={18} />
+            </div>
+        </LoadingImage>
       </ThemeProvider>
     );
   }

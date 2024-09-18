@@ -1,6 +1,7 @@
 import { GlobalStyles } from "@/styles/global";
 import { defaultTheme } from "@/themes/default";
-import { Loader, Pen, Trash2 } from "lucide-react";
+import { Loader, Pen, Spline, Trash2 } from "lucide-react";
+import  logoKel  from "@/../public/kelprint.png"
 import Link from "next/link";
 import { ThemeProvider } from "styled-components";
 import {
@@ -12,12 +13,14 @@ import {
   MainFinishedFalse,
   MainFinishedDanger,
   TrashButton,
-  PenButton
+  PenButton,
+  LoadingImage
 } from "./styles";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { format, isToday } from "date-fns"; // Importando função isToday
 import { BACKEND_URL } from "@/api";
+import Image from "next/image";
 
 interface clientOrderProps {
   finished: boolean;
@@ -90,10 +93,13 @@ export default function ClientList({ clients: initialClient }: ClientInfoProps) 
   if (!client || client.length === 0) {
     return (
       <ThemeProvider theme={defaultTheme}>
-        <Loading>
-          <Loader width={25} />
-          <span>Carregando clientes...</span>
-        </Loading>
+        <LoadingImage>
+          <Image src={logoKel} alt="Carregando" />
+            <div>
+              <span>Carregando clientes...</span>
+              <Loader width={18} />
+            </div>
+        </LoadingImage>
       </ThemeProvider>
     );
   }
