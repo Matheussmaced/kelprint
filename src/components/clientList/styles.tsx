@@ -121,9 +121,9 @@ export const TrashButton = styled.div`
 
 export const PenButton = styled.div`
   padding: 0.6rem 0.8rem;
-  background-color: ${(props) => props.theme["button-orange"]};
+  background-color: ${(props) => props.theme["header-blue"]};
   border-radius: 6px;
-  color: ${(props) => props.theme.black};
+  color: ${(props) => props.theme.white};
 
   cursor: pointer;
   transition: 0.5s;
